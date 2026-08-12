@@ -202,23 +202,22 @@ function cloudSave(){
   }).then(function(){_cloudSyncing=false;updateCloudStatus(true);}).catch(function(){_cloudSyncing=false;updateCloudStatus(false);});
 }
 
-function cloudLoad(){
-  fetch(SB_URL+'/rest/v1/ruankao_quiz?id=eq.1&select=data',{
-    headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}
-  }).then(function(r){return r.json()}).then(function(rows){
+async function cloudLoad(){
+  try{
+    var res=await fetch(SB_URL+'/rest/v1/ruankao_quiz?id=eq.1&select=data',{
+      headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}
+    });
+    if(!res.ok){updateCloudStatus(false);return;}
+    var rows=await res.json();
     if(rows&&rows.length&&rows[0].data){
       var cloud=typeof rows[0].data==='string'?JSON.parse(rows[0].data):rows[0].data;
       if(cloud&&cloud.questions){
-        var local=loadData();
-        // 云端有数据且题目数不同则更新本地并刷新页面
-        if(!local.questions.length||local.questions.length!==cloud.questions.length||JSON.stringify(local)!==JSON.stringify(cloud)){
-          localStorage.setItem(STORAGE_KEY,JSON.stringify(cloud));
-          if(document.getElementById('app')) renderPage();
-        }
+        localStorage.setItem(STORAGE_KEY,JSON.stringify(cloud));
+        renderPage();
         updateCloudStatus(true);
       }
     }
-  }).catch(function(){updateCloudStatus(false);});
+  }catch(e){console.warn('cloudLoad error:',e);updateCloudStatus(false);}
 }
 
 function updateCloudStatus(ok){
@@ -832,16 +831,18 @@ function aiLog(msg) {
 
 // 初始化
 function init(){
-  var d=loadData();
-  if(!d.questions.length){
-    // 本地无数据，先显示加载状态
-    var app=document.getElementById('app');
-    if(app) app.innerHTML='<div class="card" style="text-align:center;padding:60px"><h2>正在从云端加载题库...</h2><p style="color:var(--txt2);margin-top:12px">请稍候</p></div>';
-    // 云端加载完成后 cloudLoad 会自动刷新页面
-  }
-  cloudLoad();setInterval(cloudLoad,60000);
-  // 本地有数据则直接渲染，无数据等云端加载后自动渲染
-  if(d.questions.length) renderPage();
+  // 1. 先用本地数据渲染页面（不管有没有数据）
+  renderPage();
+  // 2. 再从云端加载最新数据，加载完成后重新渲染
+  cloudLoad().then(function(){
+    renderPage();
+  });
+  // 3. 每60秒自动从云端刷新
+  setInterval(function(){
+    cloudLoad().then(function(){
+      renderPage();
+    });
+  },60000);
 }
 
 function loadDemoData(){
