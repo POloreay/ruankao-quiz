@@ -102,9 +102,7 @@ th{background:#f8fafc;color:var(--txt2);font-weight:600}
     <div class="modal-header"><h2>⚙ 设置</h2><button class="modal-close" onclick="closeModal('settingsModal')">×</button></div>
     <div class="modal-body">
       <h3 style="margin-bottom:12px">云同步（Supabase）</h3>
-      <div class="form-group"><label>Supabase URL</label><input type="text" id="sbUrl" placeholder="https://xxxx.supabase.co"></div>
-      <div class="form-group"><label>Supabase Public Key</label><input type="text" id="sbKey" placeholder="sb_publishable_..."></div>
-      <p style="font-size:13px;color:var(--txt2);margin:8px 0 20px">填写后启用云同步，留空则仅用本地存储。</p>
+      <p style="font-size:14px;color:var(--ok);font-weight:600;margin:8px 0 16px">已配置，数据自动云端同步</p>
       <h3 style="margin-bottom:12px;padding-top:16px;border-top:1px solid var(--bdr)">AI 出题（LLM 视觉模型）</h3>
       <div class="form-group"><label>API Base URL</label><input type="text" id="llmUrl" placeholder="https://api.openai.com"></div>
       <div class="form-group"><label>API Key</label><input type="text" id="llmKey" placeholder="sk-..."></div>
@@ -188,26 +186,25 @@ function loadSettings(){
 }
 function saveSettingsData(d){ localStorage.setItem(SETTINGS_KEY,JSON.stringify(d)); }
 
-// Supabase
-var _sbSettings = loadSettings();
-var _cloudSyncing = false;
+// Supabase（已硬编码配置）
+var SB_URL='https://noqcpxmtbycmcnkgzfaw.supabase.co';
+var SB_KEY='sb_publishable_gGbMmzElq95KklX3AJRkRg_bzXev4ov';
+var _cloudSyncing=false;
 
 function cloudSave(){
-  if(!_sbSettings.sbUrl||!_sbSettings.sbKey) return;
   if(_cloudSyncing) return;
   _cloudSyncing=true;
   var d=loadData();
-  fetch(_sbSettings.sbUrl+'/rest/v1/ruankao_quiz?id=eq.1',{
-    method:'PATCH',headers:{'apikey':_sbSettings.sbKey,'Authorization':'Bearer '+_sbSettings.sbKey,
+  fetch(SB_URL+'/rest/v1/ruankao_quiz?id=eq.1',{
+    method:'PATCH',headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,
     'Content-Type':'application/json','Prefer':'return=minimal'},
     body:JSON.stringify({data:JSON.stringify(d)})
   }).then(function(){_cloudSyncing=false;updateCloudStatus(true);}).catch(function(){_cloudSyncing=false;updateCloudStatus(false);});
 }
 
 function cloudLoad(){
-  if(!_sbSettings.sbUrl||!_sbSettings.sbKey) return;
-  fetch(_sbSettings.sbUrl+'/rest/v1/ruankao_quiz?id=eq.1&select=data',{
-    headers:{'apikey':_sbSettings.sbKey,'Authorization':'Bearer '+_sbSettings.sbKey}
+  fetch(SB_URL+'/rest/v1/ruankao_quiz?id=eq.1&select=data',{
+    headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}
   }).then(function(r){return r.json()}).then(function(rows){
     if(rows&&rows.length&&rows[0].data){
       var cloud=typeof rows[0].data==='string'?JSON.parse(rows[0].data):rows[0].data;
@@ -221,7 +218,6 @@ function cloudLoad(){
 
 function updateCloudStatus(ok){
   var el=document.getElementById('cloudStatus');
-  if(!_sbSettings.sbUrl||!_sbSettings.sbKey){el.textContent='☁ 离线模式';el.style.color='#94a3b8';return;}
   el.textContent=ok?'☁ 已同步':'☁ 同步失败';el.style.color=ok?'#86efac':'#fca5a5';
 }
 
@@ -561,19 +557,17 @@ function closeModal(id){document.getElementById(id).classList.remove('show');}
 
 function showSettings(){
   var s=loadSettings();
-  document.getElementById('sbUrl').value=s.sbUrl||'';
-  document.getElementById('sbKey').value=s.sbKey||'';
   document.getElementById('llmUrl').value=s.llmUrl||'';
   document.getElementById('llmKey').value=s.llmKey||'';
   document.getElementById('llmModel').value=s.llmModel||'';
   openModal('settingsModal');
 }
 function saveSettings(){
-  var s={sbUrl:document.getElementById('sbUrl').value.trim(),sbKey:document.getElementById('sbKey').value.trim(),
+  var s={
     llmUrl:document.getElementById('llmUrl').value.trim(),llmKey:document.getElementById('llmKey').value.trim(),
     llmModel:document.getElementById('llmModel').value.trim()};
-  saveSettingsData(s); _sbSettings=s; closeModal('settingsModal');
-  cloudLoad(); updateCloudStatus(!!s.sbUrl);
+  saveSettingsData(s); closeModal('settingsModal');
+  cloudLoad();
   toast('设置已保存');
 }
 
@@ -836,7 +830,7 @@ function aiLog(msg) {
 // 初始化
 function init(){
   // 尝试从云端加载
-  if(_sbSettings.sbUrl&&_sbSettings.sbKey){cloudLoad();setInterval(cloudLoad,60000);}
+  cloudLoad();setInterval(cloudLoad,60000);
   // 检查本地是否有数据，无则提示
   var d=loadData();
   if(!d.questions.length){
