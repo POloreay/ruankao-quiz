@@ -451,17 +451,112 @@ function submitExam(){
 }
 
 // ============================================================================
-// 错题本
+// 错题本（学习模式）
 // ============================================================================
+var wrongStudyIdx=0;
+
+function getWrongQuestions(){
+  var d=loadData();
+  var wrongIds=new Set(d.records.filter(function(r){return !r.is_correct}).map(function(r){return r.qid}));
+  return d.questions.filter(function(q){return wrongIds.has(q.id)&&!q.mastered});
+}
+
 function renderWrong(app){
-  var d=loadData(), wrongIds=new Set(d.records.filter(function(r){return !r.is_correct}).map(function(r){return r.qid}));
-  var wrongQs=d.questions.filter(function(q){return wrongIds.has(q.id)});
-  var h='<h2 style="margin-bottom:16px">错题本 <span style="color:var(--txt2);font-size:14px">共 '+wrongQs.length+' 题</span></h2>';
-  if(!wrongQs.length) h+='<div class="card" style="text-align:center;padding:40px;color:var(--txt2)">暂无错题，继续保持！</div>';
-  else wrongQs.forEach(function(q){
-    h+='<div class="q-item"><div class="flex" style="gap:8px"><span class="badge badge-pri">'+esc(q.type)+'</span><span class="badge '+(q.difficulty==='基础'?'badge-ok':q.difficulty==='提高'?'badge-warn':'badge-err')+'">'+esc(q.difficulty)+'</span><span class="badge badge-gray">'+esc(q.chapter)+'</span></div><div style="margin-top:8px">'+esc(q.question)+'</div></div>';
-  });
+  var d=loadData();
+  var wrongQs=getWrongQuestions();
+  var masteredCount=d.questions.filter(function(q){return q.mastered}).length;
+  var h='<div class="flex flex-between" style="margin-bottom:16px"><h2>错题本 <span style="color:var(--txt2);font-size:14px">剩余 '+wrongQs.length+' 题</span></h2>';
+  if(masteredCount>0) h+='<button class="btn btn-out btn-sm" onclick="resetWrongBook()">重置已掌握('+masteredCount+')</button>';
+  h+='</div>';
+  if(!wrongQs.length){
+    h+='<div class="card" style="text-align:center;padding:40px;color:var(--txt2)">';
+    if(masteredCount>0) h+='<div style="font-size:40px;margin-bottom:12px">🎉</div><h2>全部掌握！</h2><p style="margin-top:8px">已掌握 '+masteredCount+' 道错题</p><button class="btn btn-out btn-sm" style="margin-top:16px" onclick="resetWrongBook()">重置错题本</button>';
+    else h+='<h2>暂无错题</h2><p style="margin-top:8px">继续保持！</p>';
+    h+='</div>';
+    app.innerHTML=h;
+    return;
+  }
+  wrongStudyIdx=Math.max(0,Math.min(wrongStudyIdx,wrongQs.length-1));
+  var q=wrongQs[wrongStudyIdx];
+  h+='<div style="margin-bottom:12px;font-size:14px;color:var(--txt2)">第 '+(wrongStudyIdx+1)+' / '+wrongQs.length+' 题'+(masteredCount?' · 已掌握 '+masteredCount+' 题':'')+'</div>';
+  h+=renderQuestionCard(q,wrongStudyIdx,wrongQs.length);
+  h+='<div id="masteredArea" style="display:none;text-align:center;margin-top:12px"><button class="btn btn-ok" id="masterBtn" onclick="masterWrongQ(\''+q.id+'\')">答对了！移出错题本</button></div>';
   app.innerHTML=h;
+  bindWrongStudyEvents(q,wrongQs.length);
+}
+
+function bindWrongStudyEvents(q,total){
+  var answered=false;
+  if(q.type==='单选'){
+    document.querySelectorAll('.q-option').forEach(function(el){
+      el.addEventListener('click',function(){
+        if(answered)return;
+        answered=true;
+        var selected=parseInt(el.dataset.idx);
+        var isCorrect=selected===q.correct_index;
+        recordAnswer(q.id,selected,isCorrect);
+        document.getElementById('answerArea').style.display='block';
+        document.getElementById('resultMsg').innerHTML=isCorrect?'<span class="badge badge-ok" style="font-size:16px">回答正确</span>':'<span class="badge badge-err" style="font-size:16px">回答错误</span>';
+        document.getElementById('masteredArea').style.display='block';
+        document.getElementById('masterBtn').disabled=!isCorrect;
+        if(!isCorrect)document.getElementById('masterBtn').style.opacity='0.4';
+        document.querySelectorAll('.q-option').forEach(function(e){e.style.pointerEvents='none'});
+        if(q.correct_index!==undefined)document.getElementById('opt'+q.correct_index).classList.add('correct');
+        if(!isCorrect)el.classList.add('wrong');
+      });
+    });
+  }else if(q.type==='判断'){
+    [true,false].forEach(function(val){
+      var btn=document.getElementById(val?'judgeT':'judgeF');
+      btn.addEventListener('click',function(){
+        if(answered)return;
+        answered=true;
+        var correctBool=q.answer==='正确';
+        var isCorrect=val===correctBool;
+        recordAnswer(q.id,val,isCorrect);
+        document.getElementById('answerArea').style.display='block';
+        document.getElementById('resultMsg').innerHTML=isCorrect?'<span class="badge badge-ok" style="font-size:16px">回答正确</span>':'<span class="badge badge-err" style="font-size:16px">回答错误</span>';
+        document.getElementById('masteredArea').style.display='block';
+        document.getElementById('masterBtn').disabled=!isCorrect;
+        if(!isCorrect)document.getElementById('masterBtn').style.opacity='0.4';
+        document.getElementById('judgeT').style.pointerEvents='none';
+        document.getElementById('judgeF').style.pointerEvents='none';
+        if(correctBool){document.getElementById('judgeT').style.opacity='1';document.getElementById('judgeF').style.opacity='0.4';}
+        else{document.getElementById('judgeF').style.opacity='1';document.getElementById('judgeT').style.opacity='0.4';}
+        if(!isCorrect)btn.style.borderColor='var(--err)';
+      });
+    });
+  }else{
+    document.getElementById('saBtn').addEventListener('click',function(){
+      if(answered)return;
+      answered=true;
+      recordAnswer(q.id,'__sa__',true);
+      document.getElementById('answerArea').style.display='block';
+      document.getElementById('masteredArea').style.display='block';
+    });
+  }
+  document.getElementById('prevBtn').addEventListener('click',function(){wrongStudyIdx=Math.max(0,wrongStudyIdx-1);renderPage();});
+  document.getElementById('nextBtn').addEventListener('click',function(){wrongStudyIdx=Math.min(total-1,wrongStudyIdx+1);renderPage();});
+}
+
+function masterWrongQ(id){
+  var d=loadData();
+  d.questions.forEach(function(q){if(q.id===id)q.mastered=true;});
+  saveData(d);
+  toast('已移出错题本，掌握得不错！');
+  var wrongQs=getWrongQuestions();
+  if(wrongStudyIdx>=wrongQs.length)wrongStudyIdx=Math.max(0,wrongQs.length-1);
+  renderPage();
+}
+
+function resetWrongBook(){
+  if(!confirm('确认重置错题本？所有已掌握的题目将重新回到错题本。'))return;
+  var d=loadData();
+  d.questions.forEach(function(q){q.mastered=false;});
+  saveData(d);
+  wrongStudyIdx=0;
+  toast('错题本已重置');
+  renderPage();
 }
 
 // ============================================================================
