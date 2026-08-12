@@ -209,7 +209,12 @@ function cloudLoad(){
     if(rows&&rows.length&&rows[0].data){
       var cloud=typeof rows[0].data==='string'?JSON.parse(rows[0].data):rows[0].data;
       if(cloud&&cloud.questions){
-        localStorage.setItem(STORAGE_KEY,JSON.stringify(cloud));
+        var local=loadData();
+        // 云端有数据且题目数不同则更新本地并刷新页面
+        if(!local.questions.length||local.questions.length!==cloud.questions.length||JSON.stringify(local)!==JSON.stringify(cloud)){
+          localStorage.setItem(STORAGE_KEY,JSON.stringify(cloud));
+          if(document.getElementById('app')) renderPage();
+        }
         updateCloudStatus(true);
       }
     }
@@ -829,15 +834,16 @@ function aiLog(msg) {
 
 // 初始化
 function init(){
-  // 尝试从云端加载
-  cloudLoad();setInterval(cloudLoad,60000);
-  // 检查本地是否有数据，无则提示
   var d=loadData();
   if(!d.questions.length){
-    // 尝试加载内置示例数据
-    loadDemoData();
+    // 本地无数据，先显示加载状态
+    var app=document.getElementById('app');
+    if(app) app.innerHTML='<div class="card" style="text-align:center;padding:60px"><h2>正在从云端加载题库...</h2><p style="color:var(--txt2);margin-top:12px">请稍候</p></div>';
+    // 云端加载完成后 cloudLoad 会自动刷新页面
   }
-  renderPage();
+  cloudLoad();setInterval(cloudLoad,60000);
+  // 本地有数据则直接渲染，无数据等云端加载后自动渲染
+  if(d.questions.length) renderPage();
 }
 
 function loadDemoData(){
