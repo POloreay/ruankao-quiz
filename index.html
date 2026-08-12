@@ -472,8 +472,18 @@ function renderBank(app){
   var h='<div class="flex flex-between" style="margin-bottom:16px"><h2>题库管理 <span style="color:var(--txt2);font-size:14px">共 '+qs.length+' 题</span></h2><div class="flex" style="gap:8px"><button class="btn btn-pri btn-sm" onclick="openAddQ()">+ 手动添题</button><button class="btn btn-out btn-sm" onclick="exportBank()">导出题库</button></div></div>';
   if(!qs.length) h+='<div class="card" style="text-align:center;padding:40px;color:var(--txt2)">题库为空，请先导入题目</div>';
   else {
-    h+='<div class="batch-bar"><input type="checkbox" id="selectAllQs" onchange="toggleSelectAll(this)" style="width:18px;height:18px;cursor:pointer"><label for="selectAllQs" style="font-size:14px;font-weight:600;cursor:pointer">全选</label><button class="btn btn-ok btn-sm" onclick="batchApprove()">批量通过</button><button class="btn btn-err btn-sm" onclick="batchReject()">批量拒绝</button><span class="sel-info" id="batchSelInfo">未选择</span></div>';
-    qs.forEach(function(q){
+    h+='<div class="batch-bar"><input type="checkbox" id="selectAllQs" onchange="toggleSelectAll(this)" style="width:18px;height:18px;cursor:pointer"><label for="selectAllQs" style="font-size:14px;font-weight:600;cursor:pointer">全选</label><button class="btn btn-ok btn-sm" onclick="batchApprove()">批量通过</button><button class="btn btn-err btn-sm" onclick="batchReject()">批量拒绝</button><button class="btn btn-out btn-sm" style="color:var(--err);border-color:#fecaca" onclick="batchDelete()">批量删除</button><span class="sel-info" id="batchSelInfo">未选择</span></div>';
+    var rejectedQs=qs.filter(function(q){return q.status==='已拒绝'});
+    var normalQs=qs.filter(function(q){return q.status!=='已拒绝'});
+    if(rejectedQs.length){
+      h+='<div class="card" style="border-color:#fecaca;background:#fef2f2;margin-bottom:16px"><div class="flex flex-between" style="margin-bottom:10px"><h3 style="color:#991b1b;font-size:15px">已拒绝题目 ('+rejectedQs.length+')</h3><button class="btn btn-out btn-sm" style="font-size:12px" onclick="clearAllRejected()">清空全部</button></div>';
+      rejectedQs.forEach(function(q){
+        h+='<div class="q-item" id="qitem-'+q.id+'" style="background:#fff"><div class="flex flex-between"><div class="flex" style="gap:8px;align-items:center"><input type="checkbox" class="q-check" value="'+q.id+'" onchange="updateBatchInfo()" style="width:16px;height:16px;cursor:pointer"><span class="badge badge-pri">'+esc(q.type)+'</span><span class="badge badge-err">已拒绝</span><span class="badge badge-gray">'+esc(q.chapter)+'</span></div><div class="flex" style="gap:4px"><button class="btn btn-ok btn-sm" onclick="approveQ(\''+q.id+'\')">恢复</button><button class="btn btn-out btn-sm" onclick="editQ(\''+q.id+'\')">编辑</button><button class="btn btn-out btn-sm" onclick="deleteQ(\''+q.id+'\')" style="color:var(--err)">删除</button></div></div><div style="margin-top:8px;font-size:15px">'+esc(q.question.slice(0,80))+(q.question.length>80?'...':'')+'</div></div>';
+      });
+      h+='</div>';
+    }
+    h+='<h3 style="font-size:15px;margin-bottom:8px;color:var(--txt)">全部题目</h3>';
+    normalQs.forEach(function(q){
       h+='<div class="q-item" id="qitem-'+q.id+'"><div class="flex flex-between"><div class="flex" style="gap:8px;align-items:center"><input type="checkbox" class="q-check" value="'+q.id+'" onchange="updateBatchInfo()" style="width:16px;height:16px;cursor:pointer"><span class="badge badge-pri">'+esc(q.type)+'</span><span class="badge '+(q.difficulty==='基础'?'badge-ok':q.difficulty==='提高'?'badge-warn':'badge-err')+'">'+esc(q.difficulty)+'</span><span class="badge '+(q.status==='已通过'?'badge-ok':q.status==='已拒绝'?'badge-err':'badge-warn')+'">'+esc(q.status)+'</span><span class="badge badge-gray">'+esc(q.chapter)+'</span></div><div class="flex" style="gap:4px"><button class="btn btn-ok btn-sm" onclick="approveQ(\''+q.id+'\')">通过</button><button class="btn btn-err btn-sm" onclick="rejectQ(\''+q.id+'\')">拒绝</button><button class="btn btn-out btn-sm" onclick="editQ(\''+q.id+'\')">编辑</button><button class="btn btn-out btn-sm" onclick="deleteQ(\''+q.id+'\')" style="color:var(--err)">删除</button></div></div><div style="margin-top:8px;font-size:15px">'+esc(q.question.slice(0,80))+(q.question.length>80?'...':'')+'</div></div>';
     });
   }
@@ -581,6 +591,8 @@ function updateBatchInfo(){var ids=getSelectedQIds();var info=document.getElemen
 function toggleSelectAll(checkbox){document.querySelectorAll('.q-check').forEach(function(c){c.checked=checkbox.checked;});updateBatchInfo();}
 function batchApprove(){var ids=getSelectedQIds();if(!ids.length){toast('请先选择题目');return;}var d=loadData();d.questions.forEach(function(q){if(ids.indexOf(q.id)>=0)q.status='已通过';});saveData(d);toast('已批量通过 '+ids.length+' 题');renderPage();}
 function batchReject(){var ids=getSelectedQIds();if(!ids.length){toast('请先选择题目');return;}var d=loadData();d.questions.forEach(function(q){if(ids.indexOf(q.id)>=0)q.status='已拒绝';});saveData(d);toast('已批量拒绝 '+ids.length+' 题');renderPage();}
+function batchDelete(){var ids=getSelectedQIds();if(!ids.length){toast('请先选择题目');return;}if(!confirm('确认删除选中的 '+ids.length+' 道题目？此操作不可撤销。'))return;var d=loadData();d.questions=d.questions.filter(function(q){return ids.indexOf(q.id)<0});saveData(d);toast('已批量删除 '+ids.length+' 题');renderPage();}
+function clearAllRejected(){var d=loadData();var cnt=d.questions.filter(function(q){return q.status==='已拒绝'}).length;if(!cnt){toast('没有已拒绝的题目');return;}if(!confirm('确认删除全部 '+cnt+' 道已拒绝题目？此操作不可撤销。'))return;d.questions=d.questions.filter(function(q){return q.status!=='已拒绝'});saveData(d);toast('已清空 '+cnt+' 道已拒绝题目');renderPage();}
 function deleteQ(id){if(!confirm('确认删除？'))return;var d=loadData();d.questions=d.questions.filter(function(q){return q.id!==id});saveData(d);renderPage();}
 function editQ(id){var d=loadData();var q=d.questions.find(function(q){return q.id===id});if(!q)return;
   document.getElementById('editQId').value=q.id;
