@@ -304,8 +304,7 @@ function renderQuestionCard(q,idx,total){
     var labels='ABCD';
     q.options.forEach(function(opt,i){h+='<div class="q-option" data-idx="'+i+'" id="opt'+i+'">'+labels[i]+'. '+esc(opt)+'</div>';});
     h+='<div id="answerArea" style="display:none;margin-top:16px"><div id="resultMsg"></div>'+
-      '<div class="card" style="background:#f8fafc;margin-top:12px"><strong>解析：</strong>'+esc(q.explanation||'')+'</div></div>'+
-      '<button id="submitBtn" class="btn btn-pri" style="margin-top:12px">提交答案</button>';
+      '<div class="card" style="background:#f8fafc;margin-top:12px"><strong>解析：</strong>'+esc(q.explanation||'')+'</div></div>';
   } else if(q.type==='判断'){
     h+='<div class="flex" style="margin-top:12px"><button class="btn btn-ok" id="judgeT">正确</button><button class="btn btn-err" id="judgeF">错误</button></div>'+
       '<div id="answerArea" style="display:none;margin-top:16px"><div id="resultMsg"></div>'+
@@ -327,23 +326,17 @@ function renderQuestionCard(q,idx,total){
 function bindQuestionEvents(q){
   var d=loadData();
   if(q.type==='单选'){
-    var selected=-1;
     document.querySelectorAll('.q-option').forEach(function(el){
       el.addEventListener('click',function(){
-        document.querySelectorAll('.q-option').forEach(function(e){e.classList.remove('selected')});
-        el.classList.add('selected'); selected=parseInt(el.dataset.idx);
+        var selected=parseInt(el.dataset.idx);
+        var isCorrect=selected===q.correct_index;
+        recordAnswer(q.id,selected,isCorrect);
+        document.getElementById('answerArea').style.display='block';
+        document.getElementById('resultMsg').innerHTML=isCorrect?'<span class="badge badge-ok" style="font-size:16px">回答正确</span>':'<span class="badge badge-err" style="font-size:16px">回答错误</span>';
+        document.querySelectorAll('.q-option').forEach(function(e){e.style.pointerEvents='none'});
+        if(q.correct_index!==undefined) document.getElementById('opt'+q.correct_index).classList.add('correct');
+        if(!isCorrect) el.classList.add('wrong');
       });
-    });
-    document.getElementById('submitBtn').addEventListener('click',function(){
-      if(selected<0){toast('请先选择一个选项');return;}
-      var isCorrect=selected===q.correct_index;
-      recordAnswer(q.id,selected,isCorrect);
-      document.getElementById('answerArea').style.display='block';
-      document.getElementById('submitBtn').style.display='none';
-      document.getElementById('resultMsg').innerHTML=isCorrect?'<span class="badge badge-ok" style="font-size:16px">回答正确</span>':'<span class="badge badge-err" style="font-size:16px">回答错误</span>';
-      document.querySelectorAll('.q-option').forEach(function(e){e.style.pointerEvents='none'});
-      if(q.correct_index!==undefined) document.getElementById('opt'+q.correct_index).classList.add('correct');
-      if(!isCorrect) document.getElementById('opt'+selected).classList.add('wrong');
     });
   } else if(q.type==='判断'){
     [true,false].forEach(function(val){
@@ -354,6 +347,11 @@ function bindQuestionEvents(q){
         recordAnswer(q.id,val,isCorrect);
         document.getElementById('answerArea').style.display='block';
         document.getElementById('resultMsg').innerHTML=isCorrect?'<span class="badge badge-ok" style="font-size:16px">回答正确</span>':'<span class="badge badge-err" style="font-size:16px">回答错误</span>';
+        document.getElementById('judgeT').style.pointerEvents='none';
+        document.getElementById('judgeF').style.pointerEvents='none';
+        if(correctBool){document.getElementById('judgeT').style.opacity='1';document.getElementById('judgeF').style.opacity='0.4';}
+        else{document.getElementById('judgeF').style.opacity='1';document.getElementById('judgeT').style.opacity='0.4';}
+        if(!isCorrect) btn.style.borderColor='var(--err)';
       });
     });
   } else {
