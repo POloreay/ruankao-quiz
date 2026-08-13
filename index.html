@@ -192,7 +192,7 @@ th{background:#f8fafc;color:var(--txt2);font-weight:600}
 // ============================================================================
 var STORAGE_KEY = 'ruankao_quiz_v1';
 var SETTINGS_KEY = 'ruankao_settings_v1';
-var defaultData = {questions:[], records:[], chapters:[]};
+var defaultData = {questions:[], records:[], chapters:[], examRecords:[]};
 
 function loadData(){
   try{ var d=JSON.parse(localStorage.getItem(STORAGE_KEY)); return d&&d.questions?d:JSON.parse(JSON.stringify(defaultData)); }
@@ -253,6 +253,8 @@ function switchPage(page){
     if(examState.timerId)clearInterval(examState.timerId);
     examState=null;
   }
+  if(page==='exam'&&examState)return; // 考试进行中，不重新渲染
+  if(page==='exam'){examResult=null;examRecordView=null;}
   currentPage=page;
   document.querySelectorAll('.nav-tab').forEach(function(t){t.classList.toggle('active',t.dataset.page===page)});
   renderPage();
@@ -330,8 +332,9 @@ function renderQuestionCard(q,idx,total){
     h+='<div id="answerArea" style="display:none;margin-top:16px"><div id="resultMsg"></div>'+
       '<div class="card" style="background:#f8fafc;margin-top:12px"><strong>解析：</strong>'+esc(q.explanation||'')+'</div></div>';
   } else if(q.type==='判断'){
-    h+='<div class="flex" style="margin-top:12px"><button class="btn btn-ok" id="judgeT">正确</button><button class="btn btn-err" id="judgeF">错误</button></div>'+
-      '<div id="answerArea" style="display:none;margin-top:16px"><div id="resultMsg"></div>'+
+    h+='<div class="q-option" data-judge="true" id="judgeT" style="margin-top:12px">正确</div>';
+    h+='<div class="q-option" data-judge="false" id="judgeF">错误</div>';
+    h+='<div id="answerArea" style="display:none;margin-top:16px"><div id="resultMsg"></div>'+
       '<div class="card" style="background:#f8fafc;margin-top:12px"><strong>解析：</strong>'+esc(q.explanation||'')+'</div></div>';
   } else {
     h+='<textarea rows="4" style="width:100%;padding:10px;border:1.5px solid var(--bdr);border-radius:8px;font-size:14px;margin-top:12px" placeholder="写下你的答案..." id="saInput"></textarea>'+
@@ -373,9 +376,9 @@ function bindQuestionEvents(q){
         document.getElementById('resultMsg').innerHTML=isCorrect?'<span class="badge badge-ok" style="font-size:16px">回答正确</span>':'<span class="badge badge-err" style="font-size:16px">回答错误</span>';
         document.getElementById('judgeT').style.pointerEvents='none';
         document.getElementById('judgeF').style.pointerEvents='none';
-        if(correctBool){document.getElementById('judgeT').style.opacity='1';document.getElementById('judgeF').style.opacity='0.4';}
-        else{document.getElementById('judgeF').style.opacity='1';document.getElementById('judgeT').style.opacity='0.4';}
-        if(!isCorrect) btn.style.borderColor='var(--err)';
+        if(correctBool)document.getElementById('judgeT').classList.add('correct');
+        else document.getElementById('judgeF').classList.add('correct');
+        if(!isCorrect)btn.classList.add('wrong');
       });
     });
   } else {
@@ -384,6 +387,9 @@ function bindQuestionEvents(q){
       document.getElementById('answerArea').style.display='block';
     });
   }
+  document.getElementById('prevBtn').addEventListener('click',function(){chPracticeIdx=Math.max(0,chPracticeIdx-1);renderPage();});
+  document.getElementById('nextBtn').addEventListener('click',function(){chPracticeIdx=Math.min(qs.length-1,chPracticeIdx+1);renderPage();});
+}
   document.getElementById('prevBtn').addEventListener('click',function(){practiceIdx=Math.max(0,practiceIdx-1);renderPage();});
   document.getElementById('nextBtn').addEventListener('click',function(){
     var d=loadData(),qs=getFilteredQuestions();practiceIdx=Math.min(qs.length-1,practiceIdx+1);renderPage();
@@ -394,11 +400,26 @@ function bindQuestionEvents(q){
 // 模拟考试
 // ============================================================================
 var examState=null;
+var examResult=null;      // 交卷后的结果数据
+var examRecordView=null;  // 查看历史记录时指定记录ID
+
 function renderExamSetup(app){
   var chapters=getChapters();
   var opts='<option value="">全部章节</option>'+chapters.map(function(c){return '<option value="'+esc(c)+'">'+esc(c)+'</option>'}).join('');
   document.getElementById('examChapter').innerHTML=opts;
-  app.innerHTML='<div class="card" style="text-align:center;padding:40px"><h2>模拟考试</h2><p style="color:var(--txt2);margin:12px 0">从已审核题库随机抽题，限时作答，交卷后统一判分</p><button class="btn btn-pri" style="margin-top:16px" onclick="openModal(\'examModal\')">设置并开始</button></div>';
+  var d=loadData();
+  var examRecords=d.examRecords||[];
+  var h='<div class="card" style="text-align:center;padding:40px"><h2>模拟考试</h2><p style="color:var(--txt2);margin:12px 0">从已审核题库随机抽题，限时作答，交卷后统一判分</p><button class="btn btn-pri" style="margin-top:16px" onclick="openModal(\'examModal\')">设置并开始</button></div>';
+  // 考试记录列表
+  if(examRecords.length){
+    h+='<div class="card"><h3 style="margin-bottom:12px">考试记录 ('+examRecords.length+')</h3>';
+    examRecords.slice().reverse().forEach(function(r){
+      var dt=new Date(r.time).toLocaleString('zh-CN');
+      h+='<div class="q-item" style="cursor:pointer" onclick="viewExamRecord(\''+r.id+'\')"><div class="flex flex-between"><div><span class="badge '+(r.score>=60?'badge-ok':'badge-err')+'">'+r.score+'分</span> <span style="color:var(--txt2);font-size:13px">'+esc(dt)+'</span></div><span style="color:var(--txt2);font-size:13px">'+r.correct+'/'+r.total+' 正确</span></div></div>';
+    });
+    h+='</div>';
+  }
+  app.innerHTML=h;
 }
 
 function startExam(){
@@ -410,7 +431,7 @@ function startExam(){
   if(ch) qs=qs.filter(function(q){return q.chapter===ch});
   if(!qs.length){toast('暂无题目');return;}
   shuffle(qs);
-  examState={questions:qs.slice(0,count),timeLimit:minutes,startedAt:Date.now(),answers:{},timerId:null,remaining:minutes*60};
+  examState={questions:qs.slice(0,count),timeLimit:minutes,answers:{},timerId:null,remaining:minutes*60,timeUp:false};
   renderExamPaper();
 }
 
@@ -420,13 +441,14 @@ function renderExamPaper(){
   var h='<div class="flex flex-between" style="margin-bottom:16px"><h2>模拟考试</h2><div><span class="exam-timer" id="examTimer">'+es.timeLimit+':00</span></div></div>'+
     '<div class="progress-bar" style="margin-bottom:16px"><div class="progress-fill" id="examBar" style="width:100%"></div></div>';
   es.questions.forEach(function(q,i){
-    h+='<div class="card"><div class="flex" style="gap:8px;margin-bottom:8px"><span class="badge badge-pri">'+esc(q.type)+'</span><span class="badge '+(q.difficulty==='基础'?'badge-ok':q.difficulty==='提高'?'badge-warn':'badge-err')+'">'+esc(q.difficulty)+'</span><span class="badge badge-gray">'+esc(q.chapter)+'</span></div>';
+    h+='<div class="card" id="examQ-'+i+'"><div class="flex" style="gap:8px;margin-bottom:8px"><span class="badge badge-pri">'+esc(q.type)+'</span><span class="badge '+(q.difficulty==='基础'?'badge-ok':q.difficulty==='提高'?'badge-warn':'badge-err')+'">'+esc(q.difficulty)+'</span><span class="badge badge-gray">'+esc(q.chapter)+'</span></div>';
     h+='<h3>'+(i+1)+'. '+esc(q.question)+'</h3>';
     if(q.type==='单选'){
       var labels='ABCD';
       q.options.forEach(function(opt,j){h+='<div class="q-option" onclick="examSelect(this,'+i+','+j+')">'+labels[j]+'. '+esc(opt)+'</div>';});
     } else if(q.type==='判断'){
-      h+='<div class="flex" style="margin-top:8px"><button class="btn btn-ok btn-sm" onclick="examSelect(this,'+i+',true)">正确</button><button class="btn btn-err btn-sm" onclick="examSelect(this,'+i+',false)">错误</button></div>';
+      h+='<div class="q-option" onclick="examSelect(this,'+i+',true)">正确</div>';
+      h+='<div class="q-option" onclick="examSelect(this,'+i+',false)">错误</div>';
     } else {
       h+='<textarea id="sa-'+i+'" rows="3" style="width:100%;padding:8px;border:1.5px solid var(--bdr);border-radius:6px;margin-top:8px" placeholder="写下你的答案"></textarea>';
     }
@@ -434,24 +456,39 @@ function renderExamPaper(){
   });
   h+='<div style="text-align:center;padding:24px"><button class="btn btn-pri" style="font-size:18px;padding:12px 40px" onclick="submitExam()">交卷</button></div>';
   app.innerHTML=h;
-  // timer
+  startExamTimer();
+}
+
+function startExamTimer(){
+  var es=examState;
+  if(es.timerId)clearInterval(es.timerId);
   es.timerId=setInterval(function(){
     es.remaining--;
+    if(es.remaining<0)es.remaining=0;
     var m=Math.floor(es.remaining/60),s=es.remaining%60;
-    document.getElementById('examTimer').textContent=m+':'+(s<10?'0':'')+s;
-    document.getElementById('examBar').style.width=(es.remaining/(es.timeLimit*60)*100)+'%';
-    if(es.remaining<=0){clearInterval(es.timerId);submitExam();}
+    var timerEl=document.getElementById('examTimer');
+    var barEl=document.getElementById('examBar');
+    if(timerEl)timerEl.textContent=m+':'+(s<10?'0':'')+s;
+    if(barEl)barEl.style.width=(es.remaining/(es.timeLimit*60)*100)+'%';
+    if(es.remaining<=0){
+      clearInterval(es.timerId);
+      es.timerId=null;
+      es.timeUp=true;
+      submitExam();
+    }
   },1000);
 }
 
 window.examSelect=function(el,qi,val){
-  if(el.classList.contains('q-option')){el.parentElement.querySelectorAll('.q-option').forEach(function(e){e.classList.remove('selected')});el.classList.add('selected');}
-  else{el.parentElement.querySelectorAll('.btn').forEach(function(e){e.classList.remove('selected')});el.classList.add('selected');}
+  if(el.classList.contains('q-option')){
+    el.parentElement.querySelectorAll('.q-option').forEach(function(e){e.classList.remove('selected')});
+    el.classList.add('selected');
+  }
   examState.answers[qi]=val;
 };
 
 function submitExam(){
-  if(examState.timerId) clearInterval(examState.timerId);
+  if(examState.timerId){clearInterval(examState.timerId);examState.timerId=null;}
   // collect SA
   examState.questions.forEach(function(q,i){
     var el=document.getElementById('sa-'+i);
@@ -464,15 +501,63 @@ function submitExam(){
     else if(q.type==='判断'){correctAns=q.answer;isCorrect=ans===(q.answer==='正确');}
     else{isCorrect=true;correctAns=q.answer||'';}
     if(isCorrect) correct++;
-    results.push({q:q.question.slice(0,60),y:yourAns,c:correctAns,ok:isCorrect});
+    results.push({q:q.question,y:yourAns,c:correctAns,ok:isCorrect,type:q.type,options:q.options,correct_index:q.correct_index,explanation:q.explanation||'',chapter:q.chapter,difficulty:q.difficulty});
     d.records.push({qid:q.id,answer:ans,is_correct:isCorrect,time:new Date().toISOString()});
   });
-  saveData(d);
-  // render result
   var score=Math.round(correct/results.length*100);
-  var rows=results.map(function(r,i){return '<tr><td>'+(i+1)+'</td><td>'+esc(r.q)+'</td><td>'+esc(r.y)+'</td><td>'+esc(r.c)+'</td><td><span class="badge '+(r.ok?'badge-ok':'badge-err')+'">'+(r.ok?'✓':'✗')+'</span></td></tr>'}).join('');
-  document.getElementById('app').innerHTML='<div class="card" style="text-align:center;padding:40px"><h2>考试结果</h2><div class="stats-grid" style="margin-top:20px"><div class="stat-card"><div class="num">'+score+'</div><div class="label">得分</div></div><div class="stat-card"><div class="num">'+correct+'/'+results.length+'</div><div class="label">正确率</div></div></div></div><div class="card"><h3>逐题详情</h3><table><tr><th>#</th><th>题目</th><th>你的答案</th><th>正确答案</th><th>结果</th></tr>'+rows+'</table></div><div style="text-align:center;padding:20px"><button class="btn btn-pri" onclick="switchPage(\'exam\')">再来一次</button></div>';
+  var examRec={id:genId(),time:new Date().toISOString(),score:score,correct:correct,total:results.length,timeLimit:examState.timeLimit,questions:examState.questions.map(function(q,i){return{q:q,yourAns:examState.answers[i]!==undefined?''+examState.answers[i]:'未作答',correctAns:results[i].c,ok:results[i].ok,type:q.type,question:q.question,options:q.options,correct_index:q.correct_index,explanation:q.explanation||'',chapter:q.chapter,difficulty:q.difficulty};})};
+  if(!d.examRecords)d.examRecords=[];
+  d.examRecords.push(examRec);
+  if(d.examRecords.length>50)d.examRecords=d.examRecords.slice(-50);
+  saveData(d);
+  examResult=results;
   examState=null;
+  renderExamResult(results,score,correct,examRec.time);
+}
+
+function renderExamResult(results,score,correct,time){
+  var app=document.getElementById('app');
+  var dt=new Date(time).toLocaleString('zh-CN');
+  var rows=results.map(function(r,i){
+    var detail='<tr><td>'+(i+1)+'</td><td>'+esc(r.q.slice(0,80))+(r.q.length>80?'...':'')+'</td><td>'+esc(r.y)+'</td><td>'+esc(r.c)+'</td><td><span class="badge '+(r.ok?'badge-ok':'badge-err')+'">'+(r.ok?'&#10003':'&#10007')+'</span></td></tr>';
+    return detail;
+  }).join('');
+  app.innerHTML='<div class="card" style="text-align:center;padding:40px"><h2>考试结果</h2><p style="color:var(--txt2);margin-top:8px">'+esc(dt)+'</p><div class="stats-grid" style="margin-top:20px"><div class="stat-card"><div class="num" style="color:'+(score>=60?'var(--ok)':'var(--err)')+'">'+score+'</div><div class="label">得分</div></div><div class="stat-card"><div class="num">'+correct+'/'+results.length+'</div><div class="label">正确率</div></div></div></div><div class="card"><h3>逐题详情</h3><table><tr><th>#</th><th>题目</th><th>你的答案</th><th>正确答案</th><th>结果</th></tr>'+rows+'</table></div><div style="text-align:center;padding:20px"><button class="btn btn-pri" onclick="switchPage(\'exam\')">再来一次</button></div>';
+}
+
+function viewExamRecord(recId){
+  var d=loadData();
+  var rec=(d.examRecords||[]).find(function(r){return r.id===recId});
+  if(!rec)return;
+  examRecordView=recId;
+  var app=document.getElementById('app');
+  var dt=new Date(rec.time).toLocaleString('zh-CN');
+  var h='<div class="flex" style="margin-bottom:16px"><button class="btn btn-out btn-sm" onclick="examRecordView=null;switchPage(\'exam\')">← 返回</button></div>';
+  h+='<div class="card" style="text-align:center;padding:30px"><h2>考试记录</h2><p style="color:var(--txt2);margin-top:8px">'+esc(dt)+'</p><div class="stats-grid" style="margin-top:16px"><div class="stat-card"><div class="num" style="color:'+(rec.score>=60?'var(--ok)':'var(--err)')+'">'+rec.score+'</div><div class="label">得分</div></div><div class="stat-card"><div class="num">'+rec.correct+'/'+rec.total+'</div><div class="label">正确率</div></div></div></div>';
+  rec.questions.forEach(function(q,i){
+    h+='<div class="card"><div class="flex" style="gap:8px;margin-bottom:8px"><span class="badge badge-pri">'+esc(q.type)+'</span><span class="badge '+(q.difficulty==='基础'?'badge-ok':q.difficulty==='提高'?'badge-warn':'badge-err')+'">'+esc(q.difficulty)+'</span><span class="badge badge-gray">'+esc(q.chapter)+'</span><span class="badge '+(q.ok?'badge-ok':'badge-err')+'">'+(q.ok?'&#10003':'&#10007')+'</span></div>';
+    h+='<h3 style="margin-bottom:12px">'+(i+1)+'. '+esc(q.question)+'</h3>';
+    if(q.type==='单选'&&q.options){
+      var labels='ABCD';
+      q.options.forEach(function(opt,j){
+        var cls='q-option';
+        if(j===q.correct_index)cls+=' correct';
+        if(''+j===q.yourAns&&j!==q.correct_index)cls+=' wrong';
+        h+='<div class="'+cls+'" style="pointer-events:none;cursor:default;margin-bottom:4px">'+labels[j]+'. '+esc(opt)+'</div>';
+      });
+    } else if(q.type==='判断'){
+      var tCls='q-option',fCls='q-option';
+      if(q.correctAns==='正确')tCls+=' correct';else fCls+=' correct';
+      if(q.yourAns==='true'&&q.correctAns!=='正确')tCls+=' wrong';
+      if(q.yourAns==='false'&&q.correctAns!=='错误')fCls+=' wrong';
+      h+='<div class="'+tCls+'" style="pointer-events:none;cursor:default;margin-bottom:4px">正确</div>';
+      h+='<div class="'+fCls+'" style="pointer-events:none;cursor:default">错误</div>';
+    }
+    h+='<div style="margin-top:8px;font-size:13px;color:var(--txt2)">你的答案：'+esc(q.yourAns)+' | 正确答案：'+esc(q.correctAns)+'</div>';
+    if(q.explanation)h+='<div class="card" style="background:#f8fafc;margin-top:8px"><strong>解析：</strong>'+esc(q.explanation)+'</div>';
+    h+='</div>';
+  });
+  app.innerHTML=h;
 }
 
 // ============================================================================
@@ -546,9 +631,9 @@ function bindWrongStudyEvents(q,total){
         if(!isCorrect)document.getElementById('masterBtn').style.opacity='0.4';
         document.getElementById('judgeT').style.pointerEvents='none';
         document.getElementById('judgeF').style.pointerEvents='none';
-        if(correctBool){document.getElementById('judgeT').style.opacity='1';document.getElementById('judgeF').style.opacity='0.4';}
-        else{document.getElementById('judgeF').style.opacity='1';document.getElementById('judgeT').style.opacity='0.4';}
-        if(!isCorrect)btn.style.borderColor='var(--err)';
+        if(correctBool)document.getElementById('judgeT').classList.add('correct');
+        else document.getElementById('judgeF').classList.add('correct');
+        if(!isCorrect)btn.classList.add('wrong');
       });
     });
   }else{
@@ -766,9 +851,9 @@ function bindChapterPracticeEvents(q,qs){
         document.getElementById('resultMsg').innerHTML=isCorrect?'<span class="badge badge-ok" style="font-size:16px">回答正确</span>':'<span class="badge badge-err" style="font-size:16px">回答错误</span>';
         document.getElementById('judgeT').style.pointerEvents='none';
         document.getElementById('judgeF').style.pointerEvents='none';
-        if(correctBool){document.getElementById('judgeT').style.opacity='1';document.getElementById('judgeF').style.opacity='0.4';}
-        else{document.getElementById('judgeF').style.opacity='1';document.getElementById('judgeT').style.opacity='0.4';}
-        if(!isCorrect)btn.style.borderColor='var(--err)';
+        if(correctBool)document.getElementById('judgeT').classList.add('correct');
+        else document.getElementById('judgeF').classList.add('correct');
+        if(!isCorrect)btn.classList.add('wrong');
       });
     });
   } else {
@@ -777,6 +862,11 @@ function bindChapterPracticeEvents(q,qs){
       document.getElementById('answerArea').style.display='block';
     });
   }
+  document.getElementById('prevBtn').addEventListener('click',function(){practiceIdx=Math.max(0,practiceIdx-1);renderPage();});
+  document.getElementById('nextBtn').addEventListener('click',function(){
+    var d=loadData(),qs=getFilteredQuestions();practiceIdx=Math.min(qs.length-1,practiceIdx+1);renderPage();
+  });
+}
   document.getElementById('prevBtn').addEventListener('click',function(){chPracticeIdx=Math.max(0,chPracticeIdx-1);renderPage();});
   document.getElementById('nextBtn').addEventListener('click',function(){chPracticeIdx=Math.min(qs.length-1,chPracticeIdx+1);renderPage();});
 }
