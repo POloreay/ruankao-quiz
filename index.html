@@ -71,124 +71,131 @@ th{background:#f8fafc;color:var(--txt2);font-weight:600}
 .modal-footer{padding:16px 24px;border-top:1px solid var(--bdr);display:flex;justify-content:flex-end;gap:10px}
 .ch-num{font-weight:600}
 /* ==========================================================================
-   驾驶舱首页 · 数据大屏风格（深蓝黑 + 青蓝主色 + 金色点缀）
+   驾驶舱首页 · 数据大屏风格（深海蓝黑 + 青蓝主色 + 金色点缀）
    ========================================================================== */
-.dash-bg{margin:-20px -16px 0;padding:26px 20px 36px;background:radial-gradient(ellipse 120% 60% at 50% -10%,rgba(34,211,238,.12),transparent 60%),radial-gradient(ellipse 80% 50% at 90% 110%,rgba(251,191,36,.08),transparent 60%),linear-gradient(165deg,#050b18 0%,#0a1128 45%,#0b1a33 100%);position:relative;overflow:hidden;color:#e2e8f0}
+.dash-bg{margin:-20px 0 0;padding:28px 32px 40px;background:radial-gradient(ellipse 100% 50% at 50% 0%,rgba(56,189,248,.1),transparent 55%),radial-gradient(ellipse 60% 40% at 85% 100%,rgba(251,191,36,.06),transparent 60%),linear-gradient(175deg,#020617 0%,#0c1631 40%,#0f1d3d 70%,#0a1530 100%);position:relative;overflow:hidden;color:#e2e8f0}
 /* 科技网格背景 */
-.dash-bg::before{content:'';position:absolute;inset:0;background:linear-gradient(rgba(34,211,238,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(34,211,238,.05) 1px,transparent 1px);background-size:44px 44px;pointer-events:none;mask-image:radial-gradient(ellipse 90% 80% at 50% 20%,#000 30%,transparent 75%)}
+.dash-bg::before{content:'';position:absolute;inset:0;background:linear-gradient(rgba(56,189,248,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(56,189,248,.04) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;mask-image:radial-gradient(ellipse 95% 80% at 50% 30%,#000 20%,transparent 80%)}
 /* 顶部扫描光带 */
-.dash-bg::after{content:'';position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,transparent,rgba(34,211,238,.7),rgba(251,191,36,.7),transparent);animation:dashScan 5s linear infinite}
+.dash-bg::after{content:'';position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,transparent,rgba(56,189,248,.8),rgba(251,191,36,.6),transparent);animation:dashScan 5s linear infinite}
 @keyframes dashScan{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
 
 /* ---------- 第一段：顶部大标题栏 ---------- */
-.dash-hero{position:relative;z-index:2;text-align:center;margin-bottom:26px;animation:dashFadeIn .5s ease both}
+.dash-hero{position:relative;z-index:2;text-align:center;margin-bottom:22px;animation:dashFadeIn .5s ease both}
 .dash-hero .dash-title-line{display:flex;align-items:center;justify-content:center;gap:14px}
-.dash-hero h2{font-size:26px;font-weight:900;color:#f8fafc;letter-spacing:4px;text-shadow:0 0 24px rgba(34,211,238,.55)}
-.dash-hero .dash-sub{font-size:13px;color:#7d8fb3;letter-spacing:2px;margin-top:6px}
-.dash-hero .dash-deco{width:60px;height:2px;background:linear-gradient(90deg,transparent,#22d3ee,transparent);position:relative}
+.dash-hero h2{font-size:28px;font-weight:900;color:#f8fafc;letter-spacing:6px;text-shadow:0 0 30px rgba(56,189,248,.5)}
+.dash-hero .dash-sub{font-size:12px;color:#64748b;letter-spacing:3px;margin-top:6px;text-transform:uppercase}
+.dash-hero .dash-deco{width:80px;height:2px;background:linear-gradient(90deg,transparent,#38bdf8,transparent);position:relative}
 .dash-hero .dash-deco::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,#fbbf24,transparent);animation:dashScan 2.4s linear infinite}
 
 /* ---------- 第二段：考试倒计时横幅 ---------- */
-.dash-countdown{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;gap:22px;margin-bottom:24px;padding:16px 24px;border:1px solid rgba(251,191,36,.35);border-radius:14px;background:linear-gradient(90deg,rgba(251,191,36,.08),rgba(34,211,238,.06),rgba(251,191,36,.08));box-shadow:0 0 30px rgba(251,191,36,.12),inset 0 0 40px rgba(251,191,36,.04);flex-wrap:wrap;animation:dashFadeIn .6s .1s ease both}
-.dash-count-label{font-size:13px;color:#d4c9a3;letter-spacing:2px;font-weight:600}
-.dash-count-num{font-size:44px;font-weight:900;color:#fbbf24;font-family:"DIN Alternate","Bahnschrift","Arial Narrow",sans-serif;line-height:1;text-shadow:0 0 26px rgba(251,191,36,.6)}
-.dash-count-unit{font-size:16px;color:#fbbf24;font-weight:700;margin-right:6px}
+.dash-countdown{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;gap:24px;margin-bottom:22px;padding:18px 32px;border:1px solid rgba(251,191,36,.3);border-radius:14px;background:linear-gradient(90deg,rgba(251,191,36,.06),rgba(56,189,248,.04),rgba(251,191,36,.06));box-shadow:0 0 40px rgba(251,191,36,.1),inset 0 0 50px rgba(251,191,36,.03);flex-wrap:wrap;animation:dashFadeIn .6s .1s ease both}
+.dash-count-label{font-size:14px;color:#d4c9a3;letter-spacing:3px;font-weight:700}
+.dash-count-num{font-size:52px;font-weight:900;color:#fbbf24;font-family:"DIN Alternate","Bahnschrift","Arial Narrow",sans-serif;line-height:1;text-shadow:0 0 30px rgba(251,191,36,.55)}
+.dash-count-unit{font-size:18px;color:#fbbf24;font-weight:700;margin-right:4px}
 .dash-count-meta{font-size:13px;color:#94a3b8}
 .dash-count-meta strong{color:#f8fafc;font-size:15px}
 .dash-count-warn{color:#fbbf24;font-weight:700;font-size:14px}
-.dash-count-far{color:#22d3ee;font-weight:700;font-size:14px}
+.dash-count-far{color:#38bdf8;font-weight:700;font-size:14px}
 
-/* ---------- 第二段：核心指标卡片 ---------- */
-.dash-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:20px;position:relative;z-index:2}
+/* ---------- 第二段：核心指标卡片（全宽一行6个） ---------- */
+.dash-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-bottom:20px;position:relative;z-index:2}
 .dash-card{
-  background:linear-gradient(160deg,rgba(15,30,58,.92),rgba(8,16,36,.95));
-  border:1px solid rgba(34,211,238,.22);border-radius:12px;padding:16px 10px 14px;text-align:center;
+  background:linear-gradient(160deg,rgba(15,30,58,.88),rgba(6,14,32,.92));
+  border:1px solid rgba(56,189,248,.2);border-radius:12px;padding:18px 12px 16px;text-align:center;
   position:relative;overflow:hidden;transition:transform .25s,border-color .25s,box-shadow .25s;
   animation:dashFadeIn .55s ease both;
 }
-.dash-card:hover{transform:translateY(-5px);border-color:rgba(34,211,238,.6);box-shadow:0 10px 34px rgba(34,211,238,.16)}
-.dash-card .dc-glow{position:absolute;top:-26px;left:50%;transform:translateX(-50%);width:90px;height:50px;border-radius:50%;filter:blur(22px);opacity:.5}
-.dash-card .dc-icon{font-size:22px;margin-bottom:2px;position:relative;z-index:1;filter:drop-shadow(0 0 8px currentColor)}
-.dash-card .dc-num{font-size:32px;font-weight:900;line-height:1.15;position:relative;z-index:1;font-family:"DIN Alternate","Bahnschrift","Arial Narrow",sans-serif;letter-spacing:.5px}
-.dash-card .dc-label{font-size:11px;color:#7d8fb3;margin-top:4px;position:relative;z-index:1;letter-spacing:1px;font-weight:600}
-.dash-card .dc-bar{position:absolute;bottom:0;left:0;right:0;height:3px;background:rgba(255,255,255,.06);overflow:hidden}
-.dash-card .dc-bar-fill{height:100%;transition:width .8s ease;box-shadow:0 0 8px currentColor}
-.dash-card .dc-tag{position:absolute;top:8px;right:8px;font-size:10px;color:#5c6f92;font-weight:700}
+.dash-card:hover{transform:translateY(-5px);border-color:rgba(56,189,248,.55);box-shadow:0 10px 34px rgba(56,189,248,.15)}
+.dash-card .dc-glow{position:absolute;top:-26px;left:50%;transform:translateX(-50%);width:90px;height:50px;border-radius:50%;filter:blur(22px);opacity:.45}
+.dash-card .dc-icon{font-size:24px;margin-bottom:4px;position:relative;z-index:1;filter:drop-shadow(0 0 8px currentColor)}
+.dash-card .dc-num{font-size:36px;font-weight:900;line-height:1.15;position:relative;z-index:1;font-family:"DIN Alternate","Bahnschrift","Arial Narrow",sans-serif;letter-spacing:.5px}
+.dash-card .dc-label{font-size:11px;color:#64748b;margin-top:6px;position:relative;z-index:1;letter-spacing:1px;font-weight:600}
+.dash-card .dc-bar{position:absolute;bottom:0;left:0;right:0;height:3px;background:rgba(255,255,255,.05);overflow:hidden}
+.dash-card .dc-bar-fill{height:100%;transition:width .8s ease;box-shadow:0 0 10px currentColor}
+.dash-card .dc-tag{position:absolute;top:8px;right:8px;font-size:10px;color:#4b5e80;font-weight:700}
 .dash-clickable{cursor:pointer}
 
-/* ---------- 第三段：中部图表区 ---------- */
-.dash-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+/* ---------- 第三段：大屏图表区（三列自适应） ---------- */
+.dash-row{display:grid;gap:16px;margin-bottom:16px}
+.dash-row.dash-row-3{grid-template-columns:1fr 1fr 1fr}
+.dash-row.dash-row-2{grid-template-columns:1fr 1fr}
+.dash-row.dash-row-1{grid-template-columns:1fr}
 .dash-panel{
-  background:linear-gradient(165deg,rgba(13,24,48,.9),rgba(7,14,30,.94));
-  border:1px solid rgba(34,211,238,.18);border-radius:14px;padding:20px 22px;
+  background:linear-gradient(165deg,rgba(12,22,50,.88),rgba(6,12,28,.92));
+  border:1px solid rgba(56,189,248,.16);border-radius:14px;padding:22px 24px;
   position:relative;overflow:hidden;animation:dashFadeIn .6s .15s ease both;
 }
 /* 面板左上角科技角标 */
-.dash-panel::before{content:'';position:absolute;top:0;left:0;width:26px;height:26px;border-top:2px solid rgba(34,211,238,.6);border-left:2px solid rgba(34,211,238,.6);border-radius:14px 0 0 0;pointer-events:none}
-.dash-panel::after{content:'';position:absolute;bottom:0;right:0;width:26px;height:26px;border-bottom:2px solid rgba(251,191,36,.5);border-right:2px solid rgba(251,191,36,.5);border-radius:0 0 14px 0;pointer-events:none}
+.dash-panel::before{content:'';position:absolute;top:0;left:0;width:26px;height:26px;border-top:2px solid rgba(56,189,248,.55);border-left:2px solid rgba(56,189,248,.55);border-radius:14px 0 0 0;pointer-events:none}
+.dash-panel::after{content:'';position:absolute;bottom:0;right:0;width:26px;height:26px;border-bottom:2px solid rgba(251,191,36,.45);border-right:2px solid rgba(251,191,36,.45);border-radius:0 0 14px 0;pointer-events:none}
 .dash-panel h3{font-size:15px;font-weight:700;margin-bottom:16px;color:#e2e8f0;display:flex;align-items:center;gap:8px}
-.dash-panel h3::before{content:'';width:4px;height:16px;background:linear-gradient(180deg,#22d3ee,#0ea5e9);border-radius:2px;box-shadow:0 0 10px rgba(34,211,238,.7)}
-.dash-panel .dp-sub{font-size:11px;color:#5b6f92;font-weight:400;margin-left:auto}
+.dash-panel h3::before{content:'';width:4px;height:16px;background:linear-gradient(180deg,#38bdf8,#0284c7);border-radius:2px;box-shadow:0 0 10px rgba(56,189,248,.6)}
+.dash-panel .dp-sub{font-size:11px;color:#4b5e80;font-weight:400;margin-left:auto}
 
 /* 雷达图 */
 .radar-wrap{display:flex;justify-content:center;padding:6px 0 2px}
-.radar-wrap svg{width:100%;max-width:300px;height:auto;filter:drop-shadow(0 0 14px rgba(34,211,238,.25))}
-.radar-legend{display:flex;justify-content:center;gap:18px;margin-top:6px;flex-wrap:wrap}
+.radar-wrap svg{width:100%;max-width:300px;height:auto;filter:drop-shadow(0 0 14px rgba(56,189,248,.2))}
+.radar-legend{display:flex;justify-content:center;gap:18px;margin-top:8px;flex-wrap:wrap}
 .radar-legend span{font-size:12px;color:#94a3b8;display:flex;align-items:center;gap:6px}
 .radar-legend i{width:9px;height:9px;border-radius:2px;display:inline-block}
 
 /* 环形图（覆盖率） */
 .donut-wrap{display:flex;align-items:center;justify-content:center;gap:30px;flex-wrap:wrap}
-.donut{width:150px;height:150px;border-radius:50%;position:relative;display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 0 16px rgba(34,211,238,.2))}
-.donut::before{content:'';position:absolute;width:92px;height:92px;background:#0b1428;border-radius:50%;box-shadow:inset 0 0 14px rgba(34,211,238,.18),0 0 0 1px rgba(34,211,238,.12)}
+.donut{width:150px;height:150px;border-radius:50%;position:relative;display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 0 16px rgba(56,189,248,.18))}
+.donut::before{content:'';position:absolute;width:92px;height:92px;background:#0c1631;border-radius:50%;box-shadow:inset 0 0 14px rgba(56,189,248,.15),0 0 0 1px rgba(56,189,248,.1)}
 .donut-center{position:relative;z-index:1;text-align:center}
 .donut-center .dc-pct{font-size:28px;font-weight:900;font-family:"DIN Alternate","Bahnschrift","Arial Narrow",sans-serif}
-.donut-center .dc-sub{font-size:11px;color:#7d8fb3;margin-top:2px}
+.donut-center .dc-sub{font-size:11px;color:#64748b;margin-top:2px}
 .donut-legend{display:flex;flex-direction:column;gap:10px}
 .donut-legend-item{display:flex;align-items:center;gap:8px;font-size:13px;color:#cbd5e1}
 .donut-legend-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0;box-shadow:0 0 8px currentColor}
 .donut-legend-val{font-weight:800;color:#f8fafc;margin-left:auto;font-family:"DIN Alternate","Bahnschrift",sans-serif}
 
-/* 近7天趋势柱状图 */
-.bar-chart{display:flex;align-items:flex-end;justify-content:space-around;gap:10px;height:150px;padding:0 6px;border-bottom:2px solid rgba(34,211,238,.15);margin-bottom:8px;position:relative}
-.bar-chart::before{content:'';position:absolute;left:0;right:0;bottom:0;height:0;box-shadow:0 -1px 0 rgba(34,211,238,.1)}
-.bar-col{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;max-width:64px}
-.bar-stack{width:100%;max-width:40px;border-radius:6px 6px 0 0;min-height:4px;position:relative;display:flex;align-items:flex-start;justify-content:center;transition:height .6s cubic-bezier(.34,1.56,.64,1);background:linear-gradient(180deg,#22d3ee,#0e7490);box-shadow:0 0 14px rgba(34,211,238,.35)}
-.bar-stack.bar-gold{background:linear-gradient(180deg,#fbbf24,#b45309);box-shadow:0 0 14px rgba(251,191,36,.35)}
-.bar-stack .bar-val{font-size:11px;font-weight:800;color:#f1f5f9;padding-top:4px;text-shadow:0 1px 3px rgba(0,0,0,.6)}
-.bar-label{font-size:11px;color:#7d8fb3;font-weight:600;text-align:center;white-space:nowrap}
-.bar-sub{font-size:10px;color:#5b6f92}
+/* 近7天趋势柱状图（间距拉宽） */
+.bar-chart{display:flex;align-items:flex-end;justify-content:space-around;gap:18px;height:160px;padding:0 12px;border-bottom:2px solid rgba(56,189,248,.15);margin-bottom:12px;position:relative}
+.bar-chart::before{content:'';position:absolute;left:0;right:0;bottom:0;height:0;box-shadow:0 -1px 0 rgba(56,189,248,.1)}
+.bar-col{display:flex;flex-direction:column;align-items:center;flex:1;max-width:88px}
+.bar-val-wrap{height:24px;display:flex;align-items:flex-end;justify-content:center;font-size:12px;font-weight:800;color:#94a3b8}
+.bar-stack{width:100%;max-width:48px;border-radius:6px 6px 0 0;min-height:4px;position:relative;display:flex;align-items:flex-start;justify-content:center;transition:height .6s cubic-bezier(.34,1.56,.64,1);background:linear-gradient(180deg,#38bdf8,#0369a1);box-shadow:0 0 14px rgba(56,189,248,.3)}
+.bar-stack.bar-gold{background:linear-gradient(180deg,#fbbf24,#b45309);box-shadow:0 0 14px rgba(251,191,36,.3)}
+.bar-stack.bar-zero{background:rgba(56,189,248,.15);box-shadow:none}
+.bar-label{font-size:12px;color:#64748b;font-weight:600;text-align:center;white-space:nowrap;padding-top:10px;margin-top:0;border-top:1px solid rgba(56,189,248,.12)}
+.bar-sub{font-size:10px;color:#4b5e80;margin-top:2px}
 
 /* 章节掌握度 */
-.ch-master{display:flex;flex-direction:column;gap:9px;max-height:230px;overflow-y:auto;padding-right:4px}
+.ch-master{display:flex;flex-direction:column;gap:10px;max-height:260px;overflow-y:auto;padding-right:4px}
 .ch-master::-webkit-scrollbar{width:4px}
-.ch-master::-webkit-scrollbar-thumb{background:rgba(34,211,238,.3);border-radius:2px}
+.ch-master::-webkit-scrollbar-thumb{background:rgba(56,189,248,.3);border-radius:2px}
 .chm-row{display:flex;align-items:center;gap:10px;font-size:12px}
-.chm-label{width:88px;flex-shrink:0;color:#94a3b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11px}
+.chm-label{width:110px;flex-shrink:0;color:#94a3b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11px}
 .chm-track{flex:1;height:10px;background:rgba(255,255,255,.06);border-radius:5px;overflow:hidden;position:relative}
-.chm-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,#22d3ee,#0ea5e9);box-shadow:0 0 8px rgba(34,211,238,.4);width:0;transition:width .8s ease}
-.chm-fill.gold{background:linear-gradient(90deg,#fbbf24,#d97706);box-shadow:0 0 8px rgba(251,191,36,.4)}
-.chm-val{width:70px;flex-shrink:0;text-align:right;color:#e2e8f0;font-weight:700;font-size:11px;font-family:"DIN Alternate","Bahnschrift",sans-serif}
-.chm-empty{text-align:center;padding:30px;color:#5b6f92;font-size:13px}
+.chm-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,#38bdf8,#0284c7);box-shadow:0 0 8px rgba(56,189,248,.35);width:0;transition:width .8s ease}
+.chm-fill.gold{background:linear-gradient(90deg,#fbbf24,#d97706);box-shadow:0 0 8px rgba(251,191,36,.35)}
+.chm-val{width:80px;flex-shrink:0;text-align:right;color:#e2e8f0;font-weight:700;font-size:11px;font-family:"DIN Alternate","Bahnschrift",sans-serif}
+.chm-empty{text-align:center;padding:30px;color:#4b5e80;font-size:13px}
 
 /* 考试记录 */
 .exam-list{display:flex;flex-direction:column;gap:8px}
-.exam-item{display:flex;align-items:center;gap:12px;padding:10px 14px;border:1px solid rgba(34,211,238,.14);border-radius:9px;cursor:pointer;transition:all .2s;background:rgba(10,20,40,.5)}
-.exam-item:hover{border-color:rgba(34,211,238,.4);background:rgba(34,211,238,.07);transform:translateX(4px)}
+.exam-item{display:flex;align-items:center;gap:12px;padding:10px 14px;border:1px solid rgba(56,189,248,.14);border-radius:9px;cursor:pointer;transition:all .2s;background:rgba(8,16,36,.5)}
+.exam-item:hover{border-color:rgba(56,189,248,.4);background:rgba(56,189,248,.06);transform:translateX(4px)}
 .exam-item .ei-score{font-size:22px;font-weight:900;min-width:50px;text-align:center;font-family:"DIN Alternate","Bahnschrift",sans-serif}
-.exam-item .ei-info{flex:1;font-size:12px;color:#7d8fb3}
+.exam-item .ei-info{flex:1;font-size:12px;color:#64748b}
 .exam-item .ei-info strong{color:#f1f5f9;font-size:13px}
-.exam-empty{text-align:center;padding:28px;color:#5b6f92;font-size:13px}
-.dash-link{display:inline-block;margin-top:10px;padding:8px 22px;border-radius:8px;background:linear-gradient(135deg,#22d3ee,#0ea5e9);color:#04101f;font-size:13px;font-weight:800;cursor:pointer;transition:all .2s;text-decoration:none;box-shadow:0 4px 18px rgba(34,211,238,.3)}
-.dash-link:hover{transform:translateY(-2px);box-shadow:0 8px 26px rgba(34,211,238,.45)}
+.exam-empty{text-align:center;padding:28px;color:#4b5e80;font-size:13px}
+.dash-link{display:inline-block;margin-top:10px;padding:8px 22px;border-radius:8px;background:linear-gradient(135deg,#38bdf8,#0284c7);color:#020617;font-size:13px;font-weight:800;cursor:pointer;transition:all .2s;text-decoration:none;box-shadow:0 4px 18px rgba(56,189,248,.25)}
+.dash-link:hover{transform:translateY(-2px);box-shadow:0 8px 26px rgba(56,189,248,.4)}
 
 /* ---------- 动态效果 ---------- */
 @keyframes dashFadeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 @keyframes dashPulse{0%,100%{opacity:1}50%{opacity:.35}}
 .dc-num.pulse{animation:dashPulse .5s ease 2}
 .dash-panel h3 .dp-flag{font-size:10px;font-weight:700;color:#fbbf24;border:1px solid rgba(251,191,36,.4);padding:1px 6px;border-radius:4px;margin-left:4px}
-@media(max-width:960px){.dash-grid{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:680px){.dash-grid{grid-template-columns:repeat(2,1fr)}.dash-row{grid-template-columns:1fr}.dash-bg{padding:24px 14px}}
+/* 首页全屏铺满 */
+body.page-home .container{max-width:100%;padding:0;margin:0}
+body.page-home .dash-bg{margin:0;padding:28px 40px 40px;min-height:calc(100vh - 100px)}
+@media(max-width:1100px){.dash-row.dash-row-3{grid-template-columns:1fr 1fr}.dash-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:768px){.dash-grid{grid-template-columns:repeat(2,1fr)}.dash-row.dash-row-3,.dash-row.dash-row-2{grid-template-columns:1fr}.dash-bg{padding:24px 16px 32px}}
 @media(max-width:600px){.stats-grid{grid-template-columns:1fr 1fr}.header{padding:12px 16px}.container{padding:0 8px}}
 </style>
 </head>
@@ -383,6 +390,7 @@ function switchPage(page){
   if(page==='exam'&&examState)return; // 考试进行中，不重新渲染
   if(page==='exam'){examResult=null;examRecordView=null;}
   currentPage=page;
+  document.body.className=page==='home'?'page-home':'';
   document.querySelectorAll('.nav-tab').forEach(function(t){t.classList.toggle('active',t.dataset.page===page)});
   renderPage();
 }
@@ -533,11 +541,12 @@ function renderHome(app){
     dayCounts.push(cnt);
   }
   var maxDay=Math.max.apply(null,dayCounts.concat([1]));
-  var trendHTML=dayCounts.map(function(c,idx){
+var trendHTML=dayCounts.map(function(c,idx){
     var h=Math.round(c/maxDay*120);
     var isToday=idx===6;
     return '<div class="bar-col">'+
-      '<div class="bar-stack '+(c>0?'':'bar-zero')+'" style="height:'+Math.max(c>0?h:3,3)+'px;box-shadow:'+(c>0?(isToday?'0 0 16px rgba(251,191,36,.5)':'0 0 14px rgba(34,211,238,.35)'):'none')+'"><span class="bar-val">'+c+'</span></div>'+
+      '<div class="bar-val-wrap" style="color:'+(c>0?'#e2e8f0':'#475569')+'">'+c+'</div>'+
+      '<div class="bar-stack '+(c>0?'':'bar-zero')+'" style="height:'+Math.max(c>0?h:3,3)+'px;box-shadow:'+(c>0?(isToday?'0 0 16px rgba(251,191,36,.5)':'0 0 14px rgba(56,189,248,.35)'):'none')+'"></div>'+
       '<div class="bar-label" style="'+(isToday?'color:#fbbf24;font-weight:800':'')+'">'+dayLabels[idx]+'</div>'+
       '<div class="bar-sub">'+(isToday?'今天':'')+'</div>'+
     '</div>';
@@ -608,11 +617,9 @@ function renderHome(app){
     '</div>'+
     '<div class="dash-countdown">'+cdText+'</div>'+
     '<div class="dash-grid">'+cardsHTML+'</div>'+
-    '<div class="dash-row">'+
-      '<div class="dash-panel"><h3>题型掌握度 <span class="dp-sub">雷达图</span></h3>'+radarHTML+radarLegendHTML+'</div>'+
+    '<div class="dash-row dash-row-3">'+
+      '<div class="dash-panel"><h3>题型掌握度 <span class="dp-sub">雷达图</span></h3>'+radarHTML+'<div class="radar-legend">'+radarLegendHTML+'</div></div>'+
       '<div class="dash-panel"><h3>近7天刷题趋势 <span class="dp-sub">每日做题数</span></h3><div class="bar-chart">'+trendHTML+'</div></div>'+
-    '</div>'+
-    '<div class="dash-row">'+
       '<div class="dash-panel"><h3>题目覆盖率 <span class="dp-sub">按唯一题目</span></h3>'+
         '<div class="donut-wrap">'+
           '<div class="donut" style="'+donutStyle+'">'+
@@ -621,14 +628,16 @@ function renderHome(app){
           '<div class="donut-legend">'+
             '<div class="donut-legend-item"><span class="donut-legend-dot" style="background:#34d399;color:#34d399"></span>答对<span class="donut-legend-val">'+nCorrect+'</span></div>'+
             '<div class="donut-legend-item"><span class="donut-legend-dot" style="background:#f87171;color:#f87171"></span>仅答错<span class="donut-legend-val">'+nWrongOnly+'</span></div>'+
-            '<div class="donut-legend-item"><span class="donut-legend-dot" style="background:rgba(34,211,238,.25);color:rgba(34,211,238,.4)"></span>未做<span class="donut-legend-val">'+nNotDone+'</span></div>'+
-            '<div style="margin-top:8px;padding-top:10px;border-top:1px solid rgba(34,211,238,.15);font-size:12px;color:#7d8fb3">答题正确率 <strong style="color:'+accColor+';font-size:14px">'+(rs.length?accuracy+'%':'—')+'</strong> <span style="color:#5b6f92">('+correct+'/'+rs.length+' 次)</span></div>'+
+            '<div class="donut-legend-item"><span class="donut-legend-dot" style="background:rgba(56,189,248,.25);color:rgba(56,189,248,.4)"></span>未做<span class="donut-legend-val">'+nNotDone+'</span></div>'+
+            '<div style="margin-top:8px;padding-top:10px;border-top:1px solid rgba(56,189,248,.15);font-size:12px;color:#64748b">答题正确率 <strong style="color:'+accColor+';font-size:14px">'+(rs.length?accuracy+'%':'—')+'</strong> <span style="color:#475569">('+correct+'/'+rs.length+' 次)</span></div>'+
           '</div>'+
         '</div>'+
       '</div>'+
-      '<div class="dash-panel"><h3>章节掌握度 <span class="dp-sub">已做章节</span></h3><div style="display:flex;gap:16px;font-size:11px;color:#7d8fb3;margin-bottom:8px"><span><i style="display:inline-block;width:8px;height:8px;border-radius:2px;background:linear-gradient(90deg,#22d3ee,#0ea5e9);margin-right:5px"></i>做题量</span><span><i style="display:inline-block;width:8px;height:8px;border-radius:2px;background:linear-gradient(90deg,#fbbf24,#d97706);margin-right:5px"></i>掌握≥80%</span></div><div class="ch-master">'+chapHTML+'</div>'+chapMore+'</div>'+
     '</div>'+
-    '<div class="dash-panel"><h3>📝 最近考试记录 <span class="dp-sub">共 '+exs.length+' 次</span></h3><div class="exam-list">'+examListHTML+'</div></div>'+
+    '<div class="dash-row dash-row-2">'+
+      '<div class="dash-panel"><h3>章节掌握度 <span class="dp-sub">已做章节</span></h3><div style="display:flex;gap:16px;font-size:11px;color:#64748b;margin-bottom:8px"><span><i style="display:inline-block;width:8px;height:8px;border-radius:2px;background:linear-gradient(90deg,#38bdf8,#0284c7);margin-right:5px"></i>做题量</span><span><i style="display:inline-block;width:8px;height:8px;border-radius:2px;background:linear-gradient(90deg,#fbbf24,#d97706);margin-right:5px"></i>掌握≥80%</span></div><div class="ch-master">'+chapHTML+'</div>'+chapMore+'</div>'+
+      '<div class="dash-panel"><h3>📝 最近考试记录 <span class="dp-sub">共 '+exs.length+' 次</span></h3><div class="exam-list">'+examListHTML+'</div></div>'+
+    '</div>'+
   '</div>';
 
   // 数字滚动 + 进度条动画
@@ -1752,6 +1761,7 @@ function aiLog(msg) {
 // 初始化
 function init(){
   // 1. 先用本地数据渲染页面（不管有没有数据）
+  document.body.className='page-home';
   renderPage();
   // 2. 再从云端加载最新数据，加载完成后重新渲染（考试期间不重绘）
   cloudLoad().then(function(){
