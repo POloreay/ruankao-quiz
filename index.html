@@ -7,7 +7,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>if(typeof pdfjsLib!=='undefined')pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
 <style>
-:root{--bg:#f0f2f5;--header-bg:#1e293b;--header-text:#f8fafc;--card:#fff;--pri:#2563eb;--pri-l:#dbeafe;--ok:#16a34a;--err:#dc2626;--warn:#f59e0b;--txt:#1e293b;--txt2:#64748b;--bdr:#e2e8f0;--radius:10px;--shadow:0 1px 3px rgba(0,0,0,.08);--shadow-lg:0 10px 25px rgba(0,0,0,.12)}
+:root{--bg:#f0f2f5;--header-bg:linear-gradient(90deg,#0d9488,#14b8a6);--header-text:#ffffff;--card:#fff;--pri:#2563eb;--pri-l:#dbeafe;--ok:#16a34a;--err:#dc2626;--warn:#f59e0b;--txt:#1e293b;--txt2:#64748b;--bdr:#e2e8f0;--radius:10px;--shadow:0 1px 3px rgba(0,0,0,.08);--shadow-lg:0 10px 25px rgba(0,0,0,.12)}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--txt);line-height:1.6;min-height:100vh}
 .header{background:var(--header-bg);color:var(--header-text);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.15)}
@@ -17,8 +17,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 .btn{padding:8px 16px;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
 .btn-pri{background:var(--pri);color:#fff}.btn-pri:hover{background:#1d4ed8}
 .btn-ok{background:var(--ok);color:#fff}.btn-err{background:var(--err);color:#fff}
-.btn-warn{background:var(--warn);color:#fff}.btn-ghost{background:rgba(255,255,255,.12);color:var(--header-text)}
-.btn-ghost:hover{background:rgba(255,255,255,.22)}
+.btn-warn{background:var(--warn);color:#fff}.btn-ghost{background:rgba(255,255,255,.18);color:var(--header-text)}
 .btn-out{background:#fff;color:var(--txt);border:1.5px solid var(--bdr)}.btn-out:hover{border-color:var(--pri);color:var(--pri)}
 .btn-sm{padding:4px 12px;font-size:12px}
 .container{max-width:960px;margin:20px auto;padding:0 16px}
@@ -73,13 +72,13 @@ th{background:#f8fafc;color:var(--txt2);font-weight:600}
 /* ==========================================================================
    驾驶舱首页 · 浅色清爽主题（浅青底 #f0fdfa + teal 同心圆点阵）
    ========================================================================== */
-.dash-bg{margin:-20px 0 0;padding:28px 32px 40px;background-color:#f0fdfa;background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2246%22%20height%3D%2246%22%20viewBox%3D%220%200%2046%2046%22%3E%3Ccircle%20cx%3D%2223%22%20cy%3D%2223%22%20r%3D%225.25%22%20fill%3D%22none%22%20stroke%3D%22%2314b8a6%22%20stroke-opacity%3D%220.55%22%20stroke-width%3D%221.5%22%2F%3E%3Ccircle%20cx%3D%2223%22%20cy%3D%2223%22%20r%3D%2210.5%22%20fill%3D%22none%22%20stroke%3D%22%2314b8a6%22%20stroke-opacity%3D%220.55%22%20stroke-width%3D%221.5%22%2F%3E%3Ccircle%20cx%3D%2223%22%20cy%3D%2223%22%20r%3D%2215.75%22%20fill%3D%22none%22%20stroke%3D%22%2314b8a6%22%20stroke-opacity%3D%220.55%22%20stroke-width%3D%221.5%22%2F%3E%3Ccircle%20cx%3D%2223%22%20cy%3D%2223%22%20r%3D%2221%22%20fill%3D%22none%22%20stroke%3D%22%2314b8a6%22%20stroke-opacity%3D%220.55%22%20stroke-width%3D%221.5%22%2F%3E%3C%2Fsvg%3E");background-size:46px 46px;position:relative;overflow:hidden;color:#0f172a}
+.dash-bg{margin:-20px 0 0;padding:28px 32px 40px;background-color:#f0fdfa;background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2246%22%20height%3D%2246%22%20viewBox%3D%220%200%2046%2046%22%3E%3Ccircle%20cx%3D%2223%22%20cy%3D%2223%22%20r%3D%225.25%22%20fill%3D%22none%22%20stroke%3D%22%2314b8a6%22%20stroke-opacity%3D%220.8%22%20stroke-width%3D%221.5%22%2F%3E%3Ccircle%20cx%3D%2223%22%20cy%3D%2223%22%20r%3D%2210.5%22%20fill%3D%22none%22%20stroke%3D%22%2314b8a6%22%20stroke-opacity%3D%220.8%22%20stroke-width%3D%221.5%22%2F%3E%3Ccircle%20cx%3D%2223%22%20cy%3D%2223%22%20r%3D%2215.75%22%20fill%3D%22none%22%20stroke%3D%22%2314b8a6%22%20stroke-opacity%3D%220.8%22%20stroke-width%3D%221.5%22%2F%3E%3Ccircle%20cx%3D%2223%22%20cy%3D%2223%22%20r%3D%2221%22%20fill%3D%22none%22%20stroke%3D%22%2314b8a6%22%20stroke-opacity%3D%220.8%22%20stroke-width%3D%221.5%22%2F%3E%3C%2Fsvg%3E");background-size:46px 46px;position:relative;overflow:hidden;color:#0f172a}
 /* 顶部扫描光带 */
 .dash-bg::after{content:'';position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,transparent,rgba(20,184,166,.55),rgba(251,191,36,.4),transparent);animation:dashScan 5s linear infinite}
 @keyframes dashScan{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
 
 /* ---------- 考试倒计时横幅 ---------- */
-.dash-countdown{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;gap:24px;margin-bottom:22px;padding:18px 32px;border:1px solid rgba(20,184,166,.35);border-radius:14px;background:linear-gradient(90deg,rgba(20,184,166,.08),rgba(56,189,248,.06),rgba(20,184,166,.08));box-shadow:0 8px 30px rgba(20,184,166,.12);flex-wrap:wrap;animation:dashFadeIn .6s ease both}
+.dash-countdown{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;gap:24px;margin-bottom:22px;padding:18px 32px;border:1px solid rgba(20,184,166,.35);border-radius:14px;background:#fff;box-shadow:0 8px 30px rgba(20,184,166,.15);flex-wrap:wrap;animation:dashFadeIn .6s ease both}
 .dash-count-label{font-size:14px;color:#0f766e;letter-spacing:3px;font-weight:700}
 .dash-count-num{font-size:52px;font-weight:900;color:#0d9488;font-family:"DIN Alternate","Bahnschrift","Arial Narrow",sans-serif;line-height:1;text-shadow:0 0 20px rgba(20,184,166,.3)}
 .dash-count-unit{font-size:18px;color:#0d9488;font-weight:700;margin-right:4px}
@@ -91,15 +90,14 @@ th{background:#f8fafc;color:var(--txt2);font-weight:600}
 /* ---------- 核心指标卡片（全宽一行6个） ---------- */
 .dash-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-bottom:20px;position:relative;z-index:2}
 .dash-card{
-  background:rgba(255,255,255,.88);
+  background:#fff;
   border:1px solid rgba(20,184,166,.18);border-radius:12px;padding:18px 12px 16px;text-align:center;
   position:relative;overflow:hidden;transition:transform .25s,border-color .25s,box-shadow .25s;
   box-shadow:0 6px 20px rgba(15,23,42,.06);
   animation:dashFadeIn .55s ease both;
 }
 .dash-card:hover{transform:translateY(-5px);border-color:rgba(20,184,166,.6);box-shadow:0 10px 30px rgba(20,184,166,.18)}
-.dash-card .dc-glow{position:absolute;top:-26px;left:50%;transform:translateX(-50%);width:90px;height:50px;border-radius:50%;filter:blur(22px);opacity:.4}
-.dash-card .dc-icon{font-size:24px;margin-bottom:4px;position:relative;z-index:1;filter:drop-shadow(0 0 8px currentColor)}
+.dash-card .dc-icon{font-size:24px;margin-bottom:4px;position:relative;z-index:1}
 .dash-card .dc-num{font-size:36px;font-weight:900;line-height:1.15;position:relative;z-index:1;color:#0f172a;font-family:"DIN Alternate","Bahnschrift","Arial Narrow",sans-serif;letter-spacing:.5px}
 .dash-card .dc-label{font-size:11px;color:#64748b;margin-top:6px;position:relative;z-index:1;letter-spacing:1px;font-weight:600}
 .dash-card .dc-bar{position:absolute;bottom:0;left:0;right:0;height:3px;background:rgba(15,23,42,.06);overflow:hidden}
@@ -110,12 +108,12 @@ th{background:#f8fafc;color:var(--txt2);font-weight:600}
 /* ---------- 大屏图表区（三列自适应） ---------- */
 .dash-row{display:grid;gap:16px;margin-bottom:16px}
 .dash-row.dash-row-3{grid-template-columns:1fr 1fr 1fr}
-.dash-row-3 .dash-panel{padding:16px 18px 14px}
-.dash-row-3 .dash-panel h3{font-size:14px;margin-bottom:12px}
+.dash-row-3 .dash-panel{padding:16px 18px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.dash-row-3 .dash-panel h3{font-size:14px;margin-bottom:12px;justify-content:center;width:100%}
 .dash-row.dash-row-2{grid-template-columns:1fr 1fr}
 .dash-row.dash-row-1{grid-template-columns:1fr}
 .dash-panel{
-  background:rgba(255,255,255,.92);
+  background:#fff;
   border:1px solid rgba(20,184,166,.15);border-radius:14px;padding:22px 24px;
   position:relative;overflow:hidden;box-shadow:0 10px 24px rgba(15,23,42,.05);
   animation:dashFadeIn .6s .15s ease both;
@@ -128,16 +126,16 @@ th{background:#f8fafc;color:var(--txt2);font-weight:600}
 .dash-panel .dp-sub{font-size:11px;color:#94a3b8;font-weight:400;margin-left:auto}
 
 /* 雷达图 */
-.radar-wrap{display:flex;justify-content:center;padding:0}
-.radar-wrap svg{width:100%;max-width:220px;height:auto;filter:drop-shadow(0 0 8px rgba(20,184,166,.15))}
-.radar-legend{display:flex;justify-content:center;gap:14px;margin-top:6px;flex-wrap:wrap}
+.radar-wrap{display:flex;justify-content:center;padding:0;width:100%}
+.radar-wrap svg{width:100%;max-width:242px;height:auto;filter:drop-shadow(0 0 8px rgba(20,184,166,.15))}
+.radar-legend{display:flex;justify-content:center;gap:14px;margin-top:10px;flex-wrap:wrap;width:100%}
 .radar-legend span{font-size:11px;color:#64748b;display:flex;align-items:center;gap:5px}
 .radar-legend i{width:8px;height:8px;border-radius:2px;display:inline-block}
 
 /* 环形图（覆盖率） */
-.donut-wrap{display:flex;align-items:center;justify-content:center;gap:30px;flex-wrap:wrap}
-.donut{width:130px;height:130px;border-radius:50%;position:relative;display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 0 10px rgba(20,184,166,.12))}
-.donut::before{content:'';position:absolute;width:80px;height:80px;background:#fff;border-radius:50%;box-shadow:inset 0 0 8px rgba(20,184,166,.15),0 0 0 1px rgba(20,184,166,.1)}
+.donut-wrap{display:flex;align-items:center;justify-content:center;gap:30px;flex-wrap:wrap;width:100%}
+.donut{width:143px;height:143px;border-radius:50%;position:relative;display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 0 10px rgba(20,184,166,.12))}
+.donut::before{content:'';position:absolute;width:88px;height:88px;background:#fff;border-radius:50%;box-shadow:inset 0 0 8px rgba(20,184,166,.15),0 0 0 1px rgba(20,184,166,.1)}
 .donut-center{position:relative;z-index:1;text-align:center}
 .donut-center .dc-pct{font-size:24px;font-weight:900;font-family:"DIN Alternate","Bahnschrift","Arial Narrow",sans-serif}
 .donut-center .dc-sub{font-size:10px;color:#94a3b8;margin-top:1px}
@@ -438,7 +436,7 @@ function radarChartSVG(stats){
     var lxy=pt(li,R+18).split(',');
     labels+='<text x="'+lxy[0]+'" y="'+lxy[1]+'" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="700" fill="#334155">'+esc(stats[li].label)+'</text>';
   }
-  return '<svg viewBox="0 0 220 220" width="100%" style="max-width:220px" xmlns="http://www.w3.org/2000/svg">'+grid+axes+dataPoly+dots+labels+'</svg>';
+  return '<svg viewBox="0 0 220 220" width="100%" style="max-width:242px" xmlns="http://www.w3.org/2000/svg">'+grid+axes+dataPoly+dots+labels+'</svg>';
 }
 
 /* 数字滚动动画 */
@@ -595,7 +593,6 @@ var trendHTML=dayCounts.map(function(c,idx){
   var cardsHTML=cards.map(function(c,ci){
     var clickAttr=c.page?'onclick="switchPage(\''+c.page+'\')" style="cursor:pointer"':'';
     return '<div class="dash-card '+c.page+'" '+clickAttr+' style="animation-delay:'+(ci*0.07)+'s">'+
-      '<div class="dc-glow" style="background:'+c.color+'"></div>'+
       '<div class="dc-icon" style="color:'+c.color+'">'+c.icon+'</div>'+
       '<div class="dc-num" data-count="'+c.num+'" data-suffix="'+(c.suffix||'')+'" style="color:'+c.color+'">0</div>'+
       '<div class="dc-label">'+c.label+'</div>'+
@@ -608,7 +605,7 @@ var trendHTML=dayCounts.map(function(c,idx){
     '<div class="dash-countdown">'+cdText+'</div>'+
     '<div class="dash-grid">'+cardsHTML+'</div>'+
     '<div class="dash-row dash-row-3">'+
-      '<div class="dash-panel"><h3>题型掌握度 <span class="dp-sub">雷达图</span></h3>'+radarHTML+'<div class="radar-legend">'+radarLegendHTML+'</div></div>'+
+      '<div class="dash-panel"><h3>题型掌握度 <span class="dp-sub">雷达图</span></h3><div class="radar-wrap">'+radarHTML+'</div><div class="radar-legend">'+radarLegendHTML+'</div></div>'+
       '<div class="dash-panel"><h3>近7天刷题趋势 <span class="dp-sub">每日做题数</span></h3><div class="bar-chart">'+trendHTML+'</div></div>'+
       '<div class="dash-panel"><h3>题目覆盖率 <span class="dp-sub">按唯一题目</span></h3>'+
         '<div class="donut-wrap">'+
