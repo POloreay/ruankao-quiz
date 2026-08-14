@@ -111,7 +111,9 @@ th{background:#f8fafc;color:var(--txt2);font-weight:600}
 .dash-row{display:grid;gap:16px;margin-bottom:16px}
 .dash-row.dash-row-3{grid-template-columns:1fr 1fr 1fr}
 .dash-row-3 .dash-panel{padding:16px 18px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
-.dash-row-3 .dash-panel h3{font-size:14px;margin-bottom:12px;justify-content:center;width:100%}
+.dash-row-3 .dash-panel h3{position:relative;font-size:14px;margin-bottom:12px;justify-content:center;width:100%}
+.dash-row-3 .dash-panel h3::before{display:none}
+.dash-row-3 .dash-panel .dp-sub{position:absolute;right:6px;top:50%;transform:translateY(-50%);margin-left:0;font-size:10px}
 .dash-row.dash-row-2{grid-template-columns:1fr 1fr}
 .dash-row.dash-row-1{grid-template-columns:1fr}
 .dash-panel{
@@ -128,34 +130,35 @@ th{background:#f8fafc;color:var(--txt2);font-weight:600}
 .dash-panel .dp-sub{font-size:11px;color:#7d95af;font-weight:400;margin-left:auto}
 
 /* 雷达图 */
+.radar-block{width:100%;transform:translateY(15px)}
 .radar-wrap{display:flex;justify-content:center;padding:0;width:100%}
-.radar-wrap svg{width:100%;max-width:242px;height:auto;filter:drop-shadow(0 0 8px rgba(56,189,248,.2))}
+.radar-wrap svg{width:100%;max-width:302px;height:auto;filter:drop-shadow(0 0 8px rgba(56,189,248,.2))}
 .radar-legend{display:flex;justify-content:center;gap:14px;margin-top:10px;flex-wrap:wrap;width:100%}
 .radar-legend span{font-size:11px;color:#94a3b8;display:flex;align-items:center;gap:5px}
 .radar-legend i{width:8px;height:8px;border-radius:2px;display:inline-block}
 
 /* 环形图（覆盖率） */
-.donut-wrap{display:flex;align-items:center;justify-content:center;gap:30px;flex-wrap:wrap;width:100%}
-.donut{width:143px;height:143px;border-radius:50%;position:relative;display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 0 10px rgba(56,189,248,.15))}
-.donut::before{content:'';position:absolute;width:88px;height:88px;background:#0d1928;border-radius:50%;box-shadow:inset 0 0 8px rgba(56,189,248,.18),0 0 0 1px rgba(56,189,248,.12)}
+.donut-wrap{display:flex;align-items:center;justify-content:center;gap:30px;flex-wrap:wrap;width:100%;transform:translateY(15px)}
+.donut{width:179px;height:179px;border-radius:50%;position:relative;display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 0 10px rgba(56,189,248,.15))}
+.donut::before{content:'';position:absolute;width:110px;height:110px;background:#0d1928;border-radius:50%;box-shadow:inset 0 0 8px rgba(56,189,248,.18),0 0 0 1px rgba(56,189,248,.12)}
 .donut-center{position:relative;z-index:1;text-align:center}
-.donut-center .dc-pct{font-size:24px;font-weight:900;font-family:"DIN Alternate","Bahnschrift","Arial Narrow",sans-serif}
-.donut-center .dc-sub{font-size:10px;color:#7d95af;margin-top:1px}
+.donut-center .dc-pct{font-size:30px;font-weight:900;font-family:"DIN Alternate","Bahnschrift","Arial Narrow",sans-serif}
+.donut-center .dc-sub{font-size:12px;color:#7d95af;margin-top:1px}
 .donut-legend{display:flex;flex-direction:column;gap:8px}
 .donut-legend-item{display:flex;align-items:center;gap:7px;font-size:12px;color:#cbd5e1}
 .donut-legend-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0;box-shadow:0 0 6px currentColor}
 .donut-legend-val{font-weight:800;color:#f1f5f9;margin-left:auto;font-family:"DIN Alternate","Bahnschrift",sans-serif}
 
 /* 近7天趋势柱状图（间距拉宽） */
-.bar-chart{display:flex;align-items:flex-end;justify-content:space-around;gap:18px;height:120px;padding:0 12px;border-bottom:2px solid rgba(56,189,248,.28);margin-bottom:8px;position:relative}
+.bar-chart{display:flex;align-items:flex-end;justify-content:space-around;gap:18px;height:150px;padding:0 12px;border-bottom:2px solid rgba(56,189,248,.28);margin-bottom:8px;position:relative;transform:translateY(15px);width:100%}
 .bar-chart::before{content:'';position:absolute;left:0;right:0;bottom:0;height:0;box-shadow:0 -1px 0 rgba(56,189,248,.2)}
-.bar-col{display:flex;flex-direction:column;align-items:center;flex:1;max-width:88px}
-.bar-val-wrap{height:20px;display:flex;align-items:flex-end;justify-content:center;font-size:11px;font-weight:800;color:#64748b}
-.bar-stack{width:100%;max-width:48px;border-radius:6px 6px 0 0;min-height:4px;position:relative;display:flex;align-items:flex-start;justify-content:center;transition:height .6s cubic-bezier(.34,1.56,.64,1);background:linear-gradient(180deg,#38bdf8,#0891b2);box-shadow:0 0 10px rgba(56,189,248,.3)}
+.bar-col{display:flex;flex-direction:column;align-items:center;flex:1;max-width:100px}
+.bar-val-wrap{height:24px;display:flex;align-items:flex-end;justify-content:center;font-size:12px;font-weight:800;color:#64748b}
+.bar-stack{width:100%;max-width:60px;border-radius:6px 6px 0 0;min-height:4px;position:relative;display:flex;align-items:flex-start;justify-content:center;transition:height .6s cubic-bezier(.34,1.56,.64,1);background:linear-gradient(180deg,#38bdf8,#0891b2);box-shadow:0 0 10px rgba(56,189,248,.3)}
 .bar-stack.bar-gold{background:linear-gradient(180deg,#fbbf24,#d97706);box-shadow:0 0 10px rgba(251,191,36,.3)}
 .bar-stack.bar-zero{background:rgba(56,189,248,.1);box-shadow:none}
-.bar-label{font-size:11px;color:#94a3b8;font-weight:600;text-align:center;white-space:nowrap;padding-top:8px;margin-top:0;border-top:1px solid rgba(56,189,248,.2)}
-.bar-sub{font-size:9px;color:#7d95af;margin-top:1px}
+.bar-label{font-size:12px;color:#94a3b8;font-weight:600;text-align:center;white-space:nowrap;padding-top:8px;margin-top:0;border-top:1px solid rgba(56,189,248,.2)}
+.bar-sub{font-size:11px;color:#7d95af;margin-top:1px}
 
 /* 章节掌握度 */
 .ch-master{display:flex;flex-direction:column;gap:10px;max-height:260px;overflow-y:auto;padding-right:4px}
@@ -438,7 +441,7 @@ function radarChartSVG(stats){
     var lxy=pt(li,R+18).split(',');
     labels+='<text x="'+lxy[0]+'" y="'+lxy[1]+'" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="700" fill="#b8c7dc">'+esc(stats[li].label)+'</text>';
   }
-  return '<svg viewBox="0 0 220 220" width="100%" style="max-width:242px" xmlns="http://www.w3.org/2000/svg">'+grid+axes+dataPoly+dots+labels+'</svg>';
+  return '<svg viewBox="0 0 220 220" width="100%" style="max-width:302px" xmlns="http://www.w3.org/2000/svg">'+grid+axes+dataPoly+dots+labels+'</svg>';
 }
 
 /* 数字滚动动画 */
@@ -536,7 +539,7 @@ function renderHome(app){
   }
   var maxDay=Math.max.apply(null,dayCounts.concat([1]));
 var trendHTML=dayCounts.map(function(c,idx){
-    var h=Math.round(c/maxDay*120);
+    var h=Math.round(c/maxDay*150);
     var isToday=idx===6;
     return '<div class="bar-col">'+
       '<div class="bar-val-wrap" style="color:'+(c>0?'#f1f5f9':'#64748b')+'">'+c+'</div>'+
@@ -607,7 +610,7 @@ var trendHTML=dayCounts.map(function(c,idx){
     '<div class="dash-countdown">'+cdText+'</div>'+
     '<div class="dash-grid">'+cardsHTML+'</div>'+
     '<div class="dash-row dash-row-3">'+
-      '<div class="dash-panel"><h3>题型掌握度 <span class="dp-sub">雷达图</span></h3><div class="radar-wrap">'+radarHTML+'</div><div class="radar-legend">'+radarLegendHTML+'</div></div>'+
+      '<div class="dash-panel"><h3>题型掌握度 <span class="dp-sub">雷达图</span></h3><div class="radar-block"><div class="radar-wrap">'+radarHTML+'</div><div class="radar-legend">'+radarLegendHTML+'</div></div></div>'+
       '<div class="dash-panel"><h3>近7天刷题趋势 <span class="dp-sub">每日做题数</span></h3><div class="bar-chart">'+trendHTML+'</div></div>'+
       '<div class="dash-panel"><h3>题目覆盖率 <span class="dp-sub">按唯一题目</span></h3>'+
         '<div class="donut-wrap">'+
